@@ -10,8 +10,8 @@ jobs:
     steps:
       - id: set-matrix
         run: |
-          echo '::set-output name=matrix::{"include":[{"project":"foo","config":"Debug"},{"project":"bar","config":"Release"}]}'
-          echo 'name=matrix::{"include":[{"project":"foo","config":"Debug"},{"project":"bar","config":"Release"}]}' >> $GIT_OUTPUT
+          #echo '::set-output name=matrix::{"include":[{"project":"foo","config":"Debug"},{"project":"bar","config":"Release"}]}'
+          echo 'matrix={"include":[{"project":"foo","config":"Debug"},{"project":"bar","config":"Release"}]}' >> $GIT_OUTPUT
 
   job2:
     needs: job1
