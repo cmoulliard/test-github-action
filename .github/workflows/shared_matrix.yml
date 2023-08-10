@@ -25,11 +25,11 @@ jobs:
           #echo "name=[{"builder-image":"paketobuildpacks/builder-jammy-tiny:0.0.175"},{"builder-image":"paketobuildpacks/builder-jammy-tiny:0.0.173"}]" >> $GITHUB_OUTPUT
           echo "Do nothing"
   runner:
-    needs: [ builder ]
+    #needs: [ builder ]
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        cfg: ${{ fromJson(needs.builder.outputs.matrix) }}
+    #strategy:
+    #  matrix:
+    #    cfg: ${{ fromJson(needs.builder.outputs.matrix) }}
     steps:
       - run: |
           echo "name=[{"builder-image":"paketobuildpacks/builder-jammy-tiny:0.0.175"},{"builder-image":"paketobuildpacks/builder-jammy-tiny:0.0.173"}]" >> $GITHUB_OUTPUT
