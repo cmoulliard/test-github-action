@@ -8,7 +8,7 @@ matrix:
     builder-image: [ 'paketobuildpacks/builder-jammy-tiny:0.0.175' ]
     pack_cli_version: [ 'v0.30.0-rc1' ]
 EOF
-yq -o=json matrix.yml
+yq eval -o=json matrix.yml >> re.txt
 ```
 
 Generate matrix output
