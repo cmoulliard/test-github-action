@@ -32,4 +32,5 @@ jobs:
         cfg: ${{ fromJson(needs.builder.outputs.matrix) }}
     steps:
       - run: |
-          echo  "Builder-image: ${{ matrix }}"
+          echo "name=[{"builder-image":"paketobuildpacks/builder-jammy-tiny:0.0.175"},{"builder-image":"paketobuildpacks/builder-jammy-tiny:0.0.173"}]" >> $GITHUB_OUTPUT
+          echo "GITHUB_OUTPUT: $GITHUB_OUTPUT"
