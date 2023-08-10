@@ -21,6 +21,7 @@ jobs:
               pack_cli_version: [ 'v0.30.0-rc1' ]
           EOF
           ls -la
+          yq -V
           yq -v -o=json matrix.yml #>> $GITHUB_OUTPUT
   process:
     needs: builder
