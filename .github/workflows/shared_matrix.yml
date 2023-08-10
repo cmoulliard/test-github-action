@@ -11,7 +11,7 @@ jobs:
     strategy:
       matrix:
         cfg:
-          data:
+          - data:
             - { builder-image: paketobuildpacks/builder-jammy-tiny:0.0.175 }
             - { builder-image: paketobuildpacks/builder-jammy-tiny:0.0.173 }
     outputs:
@@ -21,7 +21,8 @@ jobs:
         env:
           CFG: ${{ toJSON(matrix.cfg) }}
         run: |
-          jq -r -n  'env.CFG | fromjson | @json "::set-output name=result::\(.data)"'
+          # jq -r -n  'env.CFG | fromjson | @json "result=\(.data)"'
+          echo "name=[{"builder-image":"paketobuildpacks/builder-jammy-tiny:0.0.175"},{"builder-image":"paketobuildpacks/builder-jammy-tiny:0.0.173"}]" >> $GITHUB_OUTPUT
 
   runner:
     needs: [ builder ]
