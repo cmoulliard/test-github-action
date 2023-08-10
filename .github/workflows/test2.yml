@@ -7,19 +7,17 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Set Matrix Info
+      - name: Show Matrix Info
         run: |
-          echo 'matrix: &matrix
+          echo "Matrix YAML:"
+          cat <<EOF > matrix.yml
+          matrix:
             include:
               - os: ubuntu-latest
                 node_version: "14"
               - os: ubuntu-latest
-                node_version: "16"' > matrix.yml
-
-      - name: Show Matrix Info
-        run: |
-          echo "Matrix YAML:"
-          cat matrix.yml
+                node_version: "16"'
+          EOF
 
       - name: Use Matrix in Another Job
         id: use-matrix

@@ -5,26 +5,6 @@ on:
       - test
 
 jobs:
-  set-matrix:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Set Matrix Info
-        id: set-matrix
-        run: |
-          echo '{"include": [{"os": "ubuntu-latest", "node_version": "14"},
-                             {"os": "ubuntu-latest", "node_version": "16"}]}' > matrix.json
-          echo "MATRIX=$(cat matrix.json)" >> $GITHUB_ENV
-
-    use-matrix:
-      needs: set-matrix
-      runs-on: ${{ fromJson(needs.set-matrix.outputs.MATRIX).include[0].os }}
-
-      steps:
-        - name: Print Matrix Values
-          run: |
-            echo "OS: ${{ matrix.os }}"
-            echo "Node Version: ${{ matrix.node_version }}"
-
   builder:
     runs-on: ubuntu-latest
     outputs:
