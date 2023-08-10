@@ -24,6 +24,20 @@ jobs:
   #        # jq -r -n  'env.CFG | fromjson | @json "result=\(.data)"'
   #        #echo "name=[{"builder-image":"paketobuildpacks/builder-jammy-tiny:0.0.175"},{"builder-image":"paketobuildpacks/builder-jammy-tiny:0.0.173"}]" >> $GITHUB_OUTPUT
   #        echo "Do nothing"
+  job1:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
+    steps:
+      - id: set-matrix
+        run: echo "matrix={\"include\":[{\"project\":\"foo\",\"config\":\"Debug\"},{\"project\":\"bar\",\"config\":\"Release\"}]}" >> $GITHUB_OUTPUT
+  job2:
+    needs: job1
+    runs-on: ubuntu-latest
+    strategy:
+      matrix: ${{ fromJSON(needs.job1.outputs.matrix) }}
+    steps:
+      - run: build
   runner:
     #needs: [ builder ]
     runs-on: ubuntu-latest
@@ -35,14 +49,6 @@ jobs:
         run: |
           echo "env_token=production" >> $GITHUB_OUTPUT
           echo "env_domain=example.com" >> $GITHUB_OUTPUT
-
-          echo '
-          "### Workflow variables"
-          "| Variable   | Value       |"
-          "| ---------- | ----------- |"
-          "| env_token  | $env_token  |"
-          "| env_domain | $env_domain |"
-          ' >> $GITHUB_STEP_SUMMARY
       - run: |
           echo "Token: ${{ steps.env-setup.outputs.env_token }}"
           echo "Domain: ${{ steps.env-setup.outputs.env_domain }}"
