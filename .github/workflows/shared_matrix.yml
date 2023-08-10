@@ -1,33 +1,34 @@
-name: test shared matrix
-on:
-  push:
-    branches:
-      - test
+name: Test shared matrix
+
+on: [push]
 
 jobs:
-  builder:
+  configure:
     runs-on: ubuntu-latest
     outputs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
     steps:
+      - name: Checkout to repository
+        uses: actions/checkout@v3
+      - name: yaml-to-json
+        run: |
+          yq -P -o=json matrix1.yaml > matrix1.json
       - id: set-matrix
         run: |
-          set -x
-          json_include=$(cat <<EOF | yq -P -o=json -
-          include:
-            builder-image: [ 'paketobuildpacks/builder-jammy-tiny:0.0.175' ]
-            pack_cli_version: [ 'v0.30.0-rc1' ]
-          EOF
-          )
-          json_include_oneline=$(echo $json_include | jq -c . -)
-          #echo "matrix=$json_include_oneline" >> $GITHUB_OUTPUT
-          echo "matrix={\"include\":{\"builder-image\":\"paketobuildpacks/builder-jammy-tiny:0.0.175\",\"pack_cli_version\":\"v0.30.0-rc1\"}}" >> $GITHUB_OUTPUT
+          # Syntax is working
+          # echo 'matrix={"include":[{"project":"foo","config":"Debug"},{"project":"bar","config":"Release"}]}' >> $GITHUB_OUTPUT
+          
+          # This syntax reports a : A mapping was not expected
+          #echo 'params={"builder-image":"paketobuildpacks/builder-jammy-tiny:0.0.175","pack_cli_version":"v0.30.0-rc1"}' >> $GITHUB_OUTPUT
+          
+          # This syntax works
+          echo "matrix=$(jq -c . < ./matrix1.json)" >> $GITHUB_OUTPUT
 
-  process:
-    needs: builder
+  job1:
+    needs: configure
     runs-on: ubuntu-latest
     strategy:
-      matrix: ${{ fromJSON(needs.builder.outputs.matrix) }}
+      matrix: ${{ fromJSON(needs.configure.outputs.matrix) }}
     steps:
       - run: |
           echo "Builder image: ${{ matrix.builder-image }}"
