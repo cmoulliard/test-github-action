@@ -13,10 +13,8 @@ jobs:
           cat <<EOF > matrix.yml
           matrix:
             include:
-              - os: ubuntu-latest
-                node_version: "14"
-              - os: ubuntu-latest
-                node_version: "16"'
+              builder-image: [ 'paketobuildpacks/builder-jammy-tiny:0.0.175' ]
+              pack_cli_version: [ 'v0.30.0-rc1' ]
           EOF
 
       - name: Use Matrix in Another Job
