@@ -5,32 +5,14 @@ on:
       - main
 
 jobs:
-  #builder:
-  #  name: set matrix
-  #  runs-on: ubuntu-latest
-  #  strategy:
-  #    matrix:
-  #      cfg:
-  #        - data:
-  #          - { builder-image: paketobuildpacks/builder-jammy-tiny:0.0.175 }
-  #          - { builder-image: paketobuildpacks/builder-jammy-tiny:0.0.173 }
-  #  outputs:
-  #    matrix: ${{ steps.set-matrix.outputs.matrix }}
-  #  steps:
-  #    - id: set-matrix
-  #      #env:
-  #      #  CFG: ${{ toJSON(matrix.cfg) }}
-  #      run: |
-  #        # jq -r -n  'env.CFG | fromjson | @json "result=\(.data)"'
-  #        #echo "name=[{"builder-image":"paketobuildpacks/builder-jammy-tiny:0.0.175"},{"builder-image":"paketobuildpacks/builder-jammy-tiny:0.0.173"}]" >> $GITHUB_OUTPUT
-  #        echo "Do nothing"
-  job1:
+  builder:
     runs-on: ubuntu-latest
     outputs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
     steps:
       - id: set-matrix
         run: |
+          set -x
           cfg='
           matrix:
             include:
@@ -42,7 +24,7 @@ jobs:
     needs: job1
     runs-on: ubuntu-latest
     strategy:
-      matrix: ${{ fromJSON(needs.job1.outputs.matrix) }}
+      matrix: ${{ fromJSON(needs.builder.outputs.matrix) }}
     steps:
       - run: |
           echo "Builder image: ${{ matrix.builder-image }}"
