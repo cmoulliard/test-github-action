@@ -21,7 +21,8 @@ jobs:
               pack_cli_version: [ 'v0.30.0-rc1' ]
           EOF
           ls -la
-          cat matrix.json >> $GITHUB_OUTPUT
+          cat matrix.json 
+          #>> $GITHUB_OUTPUT
   process:
     needs: builder
     runs-on: ubuntu-latest
