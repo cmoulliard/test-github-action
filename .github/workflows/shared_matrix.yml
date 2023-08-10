@@ -13,13 +13,13 @@ jobs:
       - id: set-matrix
         run: |
           set -x
-          cfg='
+          cat <<EOF > matrix.yml
           matrix:
             include:
               builder-image: [ 'paketobuildpacks/builder-jammy-tiny:0.0.175' ]
               pack_cli_version: [ 'v0.30.0-rc1' ]
-          '
-          echo $cfg | yq -o=json >> $GITHUB_OUTPUT
+          EOF
+          cat matrix.yml | yq -o=json >> $GITHUB_OUTPUT
   job2:
     needs: builder
     runs-on: ubuntu-latest
