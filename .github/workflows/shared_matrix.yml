@@ -33,12 +33,12 @@ jobs:
     steps:
       - id: env-setup
         run: |
-          {
+          echo '{
             "env_token=production"
             "env_domain=example.com"
-          } >> $GITHUB_OUTPUT
+          }' >> $GITHUB_OUTPUT
 
-          {
+          echo {
             echo "### Workflow variables"
             echo "| Variable   | Value       |"
             echo "| ---------- | ----------- |"
