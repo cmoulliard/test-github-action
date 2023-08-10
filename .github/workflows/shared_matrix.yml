@@ -21,7 +21,7 @@ jobs:
               builder-image: [ 'paketobuildpacks/builder-jammy-tiny:0.0.175' ]
               pack_cli_version: [ 'v0.30.0-rc1' ]
           EOF
-          yq -o=json eval matrix.yml -v >> $GITHUB_OUTPUT
+          yq eval -o=json matrix.yml -v >> $GITHUB_OUTPUT
   process:
     needs: builder
     runs-on: ubuntu-latest
