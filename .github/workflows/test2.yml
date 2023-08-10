@@ -1,25 +1,39 @@
-name: test shared matrix
-on:
-  push:
-    branches:
-      - main
+name: Shared Matrix Example
+
+on: [push]
 
 jobs:
-  set-matrix:
+  use-matrix:
     runs-on: ubuntu-latest
+
     steps:
       - name: Set Matrix Info
-        id: set-matrix
         run: |
-          echo '{"include": [{"os": "ubuntu-latest", "node_version": "14"},
-                             {"os": "ubuntu-latest", "node_version": "16"}]}' > matrix.json
-          echo "MATRIX=$(cat matrix.json)" >> $GITHUB_ENV
+          echo 'matrix: &matrix
+            include:
+              - os: ubuntu-latest
+                node_version: "14"
+              - os: ubuntu-latest
+                node_version: "16"' > matrix.yml
 
-  use-matrix:
-    needs: set-matrix
-    runs-on: ${{ fromJson(needs.set-matrix.outputs.MATRIX).include[0].os }}
+      - name: Show Matrix Info
+        run: |
+          echo "Matrix YAML:"
+          cat matrix.yml
+
+      - name: Use Matrix in Another Job
+        id: use-matrix
+        run: |
+          echo "Matrix in YAML:"
+          cat matrix.yml
+          echo "MATRIX=$(cat matrix.yml)" >> $GITHUB_ENV
+        shell: /usr/bin/bash -e {0}
+
+  print-matrix:
+    needs: use-matrix
+    runs-on: ubuntu-latest
+
     steps:
       - name: Print Matrix Values
         run: |
-          echo "OS: ${{ matrix.os }}"
-          echo "Node Version: ${{ matrix.node_version }}"
+          echo "MATRIX from Environment: $MATRIX"
