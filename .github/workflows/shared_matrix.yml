@@ -12,7 +12,6 @@ jobs:
     steps:
       - id: set-matrix
         run: |
-          set -x
           wget -q https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 -O yq
           chmod +x yq; sudo mv yq /usr/local/bin.yq
           cat <<EOF > matrix.yml
@@ -21,7 +20,8 @@ jobs:
               builder-image: [ 'paketobuildpacks/builder-jammy-tiny:0.0.175' ]
               pack_cli_version: [ 'v0.30.0-rc1' ]
           EOF
-          cat matrix.yml | yq e -o=json - >> $GITHUB_OUTPUT
+          ls -la
+          yq -v -o=json matrix.yml >> $GITHUB_OUTPUT
   process:
     needs: builder
     runs-on: ubuntu-latest
