@@ -1,0 +1,19 @@
+# This syntax which is similar to what we configure in a job
+# under
+# strategy:
+#  matrix:
+#   builder-image: [ 'paketobuildpacks/builder-jammy-tiny:0.0.175' ]
+#   pack_cli_version: [ 'v0.30.0-rc1' ]
+# dot not work
+# as github expects an array of values
+#
+#include:
+#  builder-image: [ 'paketobuildpacks/builder-jammy-tiny:0.0.175' ]
+#  pack_cli_version: [ 'v0.30.0-rc1' ]
+
+# This syntax whic uses an include of arrays
+include:
+  - builder-image: 'paketobuildpacks/builder-jammy-tiny:0.0.175'
+    pack_cli_version: 'v0.30.0-rc1'
+  - builder-image: 'paketobuildpacks/builder-jammy-tiny:0.0.173'
+    pack_cli_version: 'v0.30.0'
