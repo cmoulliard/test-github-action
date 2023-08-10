@@ -40,11 +40,11 @@ jobs:
           
           {
             "params": {
-               "builder-image":"paketobuildpacks/builder-jammy-tiny:0.0.175",
-               "builder-image":"paketobuildpacks/builder-jammy-tiny:0.0.173"
+               "builder-image": "paketobuildpacks/builder-jammy-tiny:0.0.175",
+               "builder-image": "paketobuildpacks/builder-jammy-tiny:0.0.173"
             }
           } >> $GITHUB_OUTPUT
       - run: |
           echo "${{ steps.env-setup.outputs.env_token }}"
           echo "${{ steps.env-setup.outputs.env_domain }}" 
-          echo "${{ steps.env-setup.outputs.params"
+          echo "${{ steps.env-setup.outputs.params }}"
