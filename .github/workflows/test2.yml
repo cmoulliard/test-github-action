@@ -10,6 +10,9 @@ jobs:
     steps:
       - name: Checkout to repository
         uses: actions/checkout@v3
+      - name: yaml-to-json
+        run: |
+          yq -P -o=json matrix1.yaml > matrix1.json
       - id: set-matrix
         run: |
           # Syntax is working
@@ -17,7 +20,9 @@ jobs:
           
           # This syntax reports a : A mapping was not expected
           #echo 'params={"builder-image":"paketobuildpacks/builder-jammy-tiny:0.0.175","pack_cli_version":"v0.30.0-rc1"}' >> $GITHUB_OUTPUT
-          echo "matrix=$(jq -c . < ./matrix.json)" >> $GITHUB_OUTPUT
+          
+          # This syntax works
+          echo "matrix=$(jq -c . < ./matrix1.json)" >> $GITHUB_OUTPUT
 
   job1:
     needs: configure
