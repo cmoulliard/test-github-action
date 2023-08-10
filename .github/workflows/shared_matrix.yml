@@ -11,7 +11,9 @@ jobs:
     strategy:
       matrix:
         cfg:
-          - { builder-image: "paketobuildpacks/builder-jammy-tiny:0.0.175" }
+          data:
+            - { builder-image: paketobuildpacks/builder-jammy-tiny:0.0.175 }
+            - { builder-image: paketobuildpacks/builder-jammy-tiny:0.0.173 }
     outputs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
     steps:
@@ -19,7 +21,7 @@ jobs:
         env:
           CFG: ${{ toJSON(matrix.cfg) }}
         run: |
-          jq -r -n 'env.CFG | fromjson'
+          jq -r -n  'env.CFG | fromjson | @json "::set-output name=result::\(.data)"'
 
   runner:
     needs: [ builder ]
