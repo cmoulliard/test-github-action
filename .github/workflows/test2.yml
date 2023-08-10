@@ -42,13 +42,3 @@ jobs:
           json_include_oneline=$(echo $json_include | jq -c . -)
           #echo "matrix=$json_include_oneline" >> $GITHUB_OUTPUT
           echo "matrix={\"include\":{\"builder-image\":\"paketobuildpacks/builder-jammy-tiny:0.0.175\",\"pack_cli_version\":\"v0.30.0-rc1\"}}" >> $GITHUB_OUTPUT
-
-  process:
-    needs: builder
-    runs-on: ubuntu-latest
-    strategy:
-      matrix: ${{ fromJSON(needs.builder.outputs.matrix) }}
-    steps:
-      - run: |
-          echo "Builder image: ${{ matrix.builder-image }}"
-          echo "Pack client image: ${{ matrix.pack_cli_version }}"
