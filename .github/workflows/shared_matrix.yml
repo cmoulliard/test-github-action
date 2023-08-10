@@ -33,18 +33,18 @@ jobs:
     steps:
       - id: env-setup
         run: |
-          echo '{
-            "env_token=production"
-            "env_domain=example.com"
-          }' >> $GITHUB_OUTPUT
+          echo '
+          "env_token=production"
+          "env_domain=example.com"
+          ' >> $GITHUB_OUTPUT
 
-          echo '{
-            "### Workflow variables"
-            "| Variable   | Value       |"
-            "| ---------- | ----------- |"
-            "| env_token  | $env_token  |"
-            "| env_domain | $env_domain |"
-          }' >> $GITHUB_STEP_SUMMARY
+          echo '
+          "### Workflow variables"
+          "| Variable   | Value       |"
+          "| ---------- | ----------- |"
+          "| env_token  | $env_token  |"
+          "| env_domain | $env_domain |"
+          ' >> $GITHUB_STEP_SUMMARY
       - run: |
           echo "${{ steps.env-setup.outputs.env_token }}"
           echo "${{ steps.env-setup.outputs.env_domain }}"
