@@ -31,6 +31,15 @@ jobs:
     #  matrix:
     #    cfg: ${{ fromJson(needs.builder.outputs.matrix) }}
     steps:
+      - id: env-setup
+        run: |
+          {
+            "env_token=production"
+            "env_domain=example.com"
+          } >> $GITHUB_OUTPUT
+          
+          echo "params=[{"builder-image":"paketobuildpacks/builder-jammy-tiny:0.0.175"},{"builder-image":"paketobuildpacks/builder-jammy-tiny:0.0.173"}]" >> $GITHUB_OUTPUT
       - run: |
-          echo "name=[{"builder-image":"paketobuildpacks/builder-jammy-tiny:0.0.175"},{"builder-image":"paketobuildpacks/builder-jammy-tiny:0.0.173"}]" >> $GITHUB_OUTPUT
-          echo "GITHUB_OUTPUT: $GITHUB_OUTPUT"
+          echo "${{ steps.env-setup.outputs.env_token }}"
+          echo "${{ steps.env-setup.outputs.env_domain }}" 
+          echo "${{ steps.env-setup.outputs.params"
