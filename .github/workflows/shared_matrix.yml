@@ -21,7 +21,7 @@ jobs:
           '
           echo $cfg | yq -o=json >> $GITHUB_OUTPUT
   job2:
-    needs: job1
+    needs: builder
     runs-on: ubuntu-latest
     strategy:
       matrix: ${{ fromJSON(needs.builder.outputs.matrix) }}
