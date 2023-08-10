@@ -3,10 +3,10 @@ name: Shared Matrix Example
 on: [push]
 
 jobs:
-  job1:
+  configure:
     runs-on: ubuntu-latest
     outputs:
-      mymatrix: ${{ steps.set-matrix.outputs.matrix }}
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
     steps:
       - id: set-matrix
         run: |
@@ -14,14 +14,15 @@ jobs:
           # echo 'matrix={"include":[{"project":"foo","config":"Debug"},{"project":"bar","config":"Release"}]}' >> $GITHUB_OUTPUT
           
           # This syntax reports a : A mapping was not expected
-          echo 'params={"builder-image":"paketobuildpacks/builder-jammy-tiny:0.0.175","pack_cli_version":"v0.30.0-rc1"}' >> $GITHUB_OUTPUT
+          #echo 'params={"builder-image":"paketobuildpacks/builder-jammy-tiny:0.0.175","pack_cli_version":"v0.30.0-rc1"}' >> $GITHUB_OUTPUT
+          echo "matrix=$(jq -c . < ./matrix.json)" >> $GITHUB_OUTPUT
 
-  job2:
-    needs: job1
+  job1:
+    needs: configure
     runs-on: ubuntu-latest
     strategy:
-      matrix: ${{ fromJSON(needs.job1.outputs.mymatrix) }}
+      matrix: ${{ fromJSON(needs.configure.outputs.matrix) }}
     steps:
       - run: |
-          echo "Builder image: ${{ matrix.params.builder-image }}"
-          echo "Pack client image: ${{ matrix.params.pack_cli_version }}"
+          echo "Builder image: ${{ matrix.builder-image }}"
+          echo "Pack client image: ${{ matrix.pack_cli_version }}"
