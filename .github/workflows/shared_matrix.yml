@@ -38,7 +38,7 @@ jobs:
       matrix: ${{ fromJSON(needs.job1.outputs.matrix) }}
     steps:
       - run: |
-          echo "Matrix: ${{ matrix }}"
+          echo "Project: ${{ matrix.project }}"
   runner:
     #needs: [ builder ]
     runs-on: ubuntu-latest
