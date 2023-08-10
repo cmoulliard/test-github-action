@@ -18,8 +18,8 @@ jobs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
     steps:
       - id: set-matrix
-        env:
-          CFG: ${{ toJSON(matrix.cfg) }}
+        #env:
+        #  CFG: ${{ toJSON(matrix.cfg) }}
         run: |
           # jq -r -n  'env.CFG | fromjson | @json "result=\(.data)"'
           echo "name=[{"builder-image":"paketobuildpacks/builder-jammy-tiny:0.0.175"},{"builder-image":"paketobuildpacks/builder-jammy-tiny:0.0.173"}]" >> $GITHUB_OUTPUT
@@ -32,4 +32,4 @@ jobs:
         cfg: ${{ fromJson(needs.builder.outputs.matrix) }}
     steps:
       - run: |
-          echo  "Builder-image: ${{ matrix.cfg.builder-image }}"
+          echo  "Builder-image: ${{ matrix }}"
