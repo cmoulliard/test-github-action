@@ -2,15 +2,13 @@
 
 Testing locally how to share a matrix
 ```bash
-cat <<EOF > cfg.yml
-data:
- - { builder-image: paketobuildpacks/builder-jammy-tiny:0.0.175 }
- - { builder-image: paketobuildpacks/builder-jammy-tiny:0.0.173 }
- #- { go: 1.13, commit: v1.0.0 }
- #- { go: 1.14, commit: v1.2.0 }
+cat <<EOF > matrix.yml
+matrix:
+  include:
+    builder-image: [ 'paketobuildpacks/builder-jammy-tiny:0.0.175' ]
+    pack_cli_version: [ 'v0.30.0-rc1' ]
 EOF
-
-yq -o=json cfg.yml > cfg.json 
+yq -o=json matrix.yml
 ```
 
 Generate matrix output

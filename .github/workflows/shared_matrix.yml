@@ -13,6 +13,8 @@ jobs:
       - id: set-matrix
         run: |
           set -x
+          wget https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 -O /usr/bin/yq
+          chmod +x /usr/bin/yq
           cat <<EOF > matrix.yml
           matrix:
             include:
@@ -20,7 +22,7 @@ jobs:
               pack_cli_version: [ 'v0.30.0-rc1' ]
           EOF
           yq -o=json matrix.yml >> $GITHUB_OUTPUT
-  job2:
+  process:
     needs: builder
     runs-on: ubuntu-latest
     strategy:
