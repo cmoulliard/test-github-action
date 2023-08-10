@@ -31,8 +31,13 @@ jobs:
     steps:
       - id: set-matrix
         run: |
-          echo "matrix={\"include\":[{\"project\":\"foo\",\"config\":\"Debug\"},{\"project\":\"bar\",\"config\":\"Release\"}]}" >> $GITHUB_OUTPUT
-          echo "matrix={\"include\":[{\"builder-image\":\"paketobuildpacks/builder-jammy-tiny:0.0.175\"},{\"builder-image\":\"paketobuildpacks/builder-jammy-tiny:0.0.173\"}]}" >> $GITHUB_OUTPUT
+          cfg='
+          matrix:
+            include:
+              builder-image: [ 'paketobuildpacks/builder-jammy-tiny:0.0.175' ]
+              pack_cli_version: [ 'v0.30.0-rc1' ]
+          '
+          echo $cfg | yq -o=json >> $GITHUB_OUTPUT
   job2:
     needs: job1
     runs-on: ubuntu-latest
@@ -40,19 +45,5 @@ jobs:
       matrix: ${{ fromJSON(needs.job1.outputs.matrix) }}
     steps:
       - run: |
-          echo "Project: ${{ matrix.project }}"
-          echo "Project: ${{ matrix.builder-image }}"
-  runner:
-    #needs: [ builder ]
-    runs-on: ubuntu-latest
-    #strategy:
-    #  matrix:
-    #    cfg: ${{ fromJson(needs.builder.outputs.matrix) }}
-    steps:
-      - id: env-setup
-        run: |
-          echo "env_token=production" >> $GITHUB_OUTPUT
-          echo "env_domain=example.com" >> $GITHUB_OUTPUT
-      - run: |
-          echo "Token: ${{ steps.env-setup.outputs.env_token }}"
-          echo "Domain: ${{ steps.env-setup.outputs.env_domain }}"
+          echo "Builder image: ${{ matrix.builder-image }}"
+          echo "Pack client image: ${{ matrix.pack_cli_version }}"
