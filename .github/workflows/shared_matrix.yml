@@ -1,0 +1,21 @@
+builder:
+  strategy:
+    matrix:
+      cfg:
+        - { builder-image: paketobuildpacks/builder-jammy-tiny:0.0.175 }
+  outputs:
+    matrix: ${{ steps.set-matrix.outputs.matrix }}
+  steps:
+    - id: set-matrix
+      run: echo "::set-output name=matrix::${{ toJson(matrix.cfg) }}"
+runner:
+  needs: [ builder ]
+  strategy:
+    matrix:
+      server:
+        - ${{ fromJson(needs.builder.outputs.matrix) }}
+      client:
+        - ${{ fromJson(needs.builder.outputs.matrix) }}
+  steps:
+    - run: |
+        echo  "Builder-image: ${{ matrix.cfg.builder-image }}"
