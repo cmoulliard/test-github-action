@@ -19,7 +19,7 @@ jobs:
         env:
           CFG: ${{ toJSON(matrix.cfg) }}
         run: |
-          jq -r -n 'env.CFG | fromjson
+          jq -r -n 'env.CFG | fromjson'
 
   runner:
     needs: [ builder ]
