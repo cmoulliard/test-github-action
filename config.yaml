@@ -1,19 +1,32 @@
-# This syntax which is similar to what we configure in a job
-# under
+#
+# To convert a yaml to json, execute the following command in a terminal
+# yq -P -o=json config.yaml
+#
+
+# >>>> Test case using job strategy syntax
+#
+# The following syntax which is derived from what we use in a job strategy
+include:
+  builder-image: [ 'paketobuildpacks/builder-jammy-tiny:0.0.173', 'paketobuildpacks/builder-jammy-tiny:0.0.175' ]
+  pack_cli_version: [ 'v0.30.0-rc1' ]
+#
+# and which corresponds to what we declare as job/step
 # strategy:
 #  matrix:
-#   builder-image: [ 'paketobuildpacks/builder-jammy-tiny:0.0.175' ]
-#   pack_cli_version: [ 'v0.30.0-rc1' ]
-# dot not work
-# as github expects an array of values
+#   builder-image: [ 'paketobuildpacks/builder-jammy-tiny:0.0.173', 'paketobuildpacks/builder-jammy-tiny:0.0.175' ]
+#   pack_cli_version: [ 'v0.30.0', 'v0.30.0-rc1' ]
 #
-#include:
-#  builder-image: [ 'paketobuildpacks/builder-jammy-tiny:0.0.175' ]
-#  pack_cli_version: [ 'v0.30.0-rc1' ]
+# dot not work as github expects an array of values !!
+#
 
-# This syntax whic uses an include of arrays
-include:
-  - builder-image: 'paketobuildpacks/builder-jammy-tiny:0.0.175'
-    pack_cli_version: 'v0.30.0-rc1'
-  - builder-image: 'paketobuildpacks/builder-jammy-tiny:0.0.173'
-    pack_cli_version: 'v0.30.0'
+#
+# This is why the yaml file should be declared as such:
+#
+# >>>> Test case with array of values
+#
+#
+# include:
+#   - builder-image: 'paketobuildpacks/builder-jammy-tiny:0.0.173'
+#     pack_cli_version: 'v0.30.0-rc1'
+#   - builder-image: 'paketobuildpacks/builder-jammy-tiny:0.0.175'
+#     pack_cli_version: 'v0.30.0'
