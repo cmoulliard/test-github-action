@@ -14,13 +14,13 @@ jobs:
         run: |
           wget -q https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 -O yq
           chmod +x yq; sudo mv yq /usr/local/bin.yq
-          cat <<EOF > matrix.yml
+          cat <<EOF | yq -P -o=json - > matrix.json
           matrix:
             include:
               builder-image: [ 'paketobuildpacks/builder-jammy-tiny:0.0.175' ]
               pack_cli_version: [ 'v0.30.0-rc1' ]
           EOF
-          yq -Poy < matrix.yml matrix.json
+          ls -la
           cat matrix.json >> $GITHUB_OUTPUT
   process:
     needs: builder
