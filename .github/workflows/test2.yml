@@ -3,33 +3,19 @@ name: Shared Matrix Example
 on: [push]
 
 jobs:
-  use-matrix:
+  job1:
     runs-on: ubuntu-latest
-
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
     steps:
-      - name: Show Matrix Info
-        run: |
-          echo "Matrix YAML:"
-          cat <<EOF > matrix.yml
-          matrix:
-            include:
-              builder-image: [ 'paketobuildpacks/builder-jammy-tiny:0.0.175' ]
-              pack_cli_version: [ 'v0.30.0-rc1' ]
-          EOF
+      - id: set-matrix
+        run: echo '::set-output name=matrix::{"include":[{"project":"foo","config":"Debug"},{"project":"bar","config":"Release"}]}'
 
-      - name: Use Matrix in Another Job
-        id: use-matrix
-        run: |
-          echo "Matrix in YAML:"
-          cat matrix.yml
-          echo "MATRIX=$(cat matrix.yml)" >> $GITHUB_ENV
-        shell: /usr/bin/bash -e {0}
-
-  print-matrix:
-    needs: use-matrix
+  job2:
+    needs: job1
     runs-on: ubuntu-latest
-
+    strategy:
+      matrix: ${{ fromJSON(needs.job1.outputs.matrix) }}
     steps:
-      - name: Print Matrix Values
-        run: |
-          echo "MATRIX from Environment: $MATRIX"
+      - run: |
+          echo "Matrix: ${{ matrix.project}}, ${{ matrix.config}}"
