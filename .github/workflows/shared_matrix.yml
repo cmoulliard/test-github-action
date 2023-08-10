@@ -11,7 +11,7 @@ jobs:
     strategy:
       matrix:
         cfg:
-          - data:
+          data:
             - { builder-image: paketobuildpacks/builder-jammy-tiny:0.0.175 }
             - { builder-image: paketobuildpacks/builder-jammy-tiny:0.0.173 }
     outputs:
