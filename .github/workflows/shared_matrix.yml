@@ -12,15 +12,15 @@ jobs:
     steps:
       - id: set-matrix
         run: |
-          wget -q https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 -O yq
-          chmod +x yq; sudo mv yq /usr/local/bin.yq
-          cat <<EOF | yq -P -o=json - > matrix.json
-          matrix:
-            include:
-              builder-image: [ 'paketobuildpacks/builder-jammy-tiny:0.0.175' ]
-              pack_cli_version: [ 'v0.30.0-rc1' ]
+          json_include=$(cat <<EOF | yq -P -o=json -
+          include:
+            builder-image: [ 'paketobuildpacks/builder-jammy-tiny:0.0.175' ]
+            pack_cli_version: [ 'v0.30.0-rc1' ]
           EOF
-          cat matrix.json | jq -c . - >> $GITHUB_OUTPUT
+          )
+          json_include_oneline=$(echo $json_include | jq -c . -)
+          echo "matrix=$json_include_oneline" >> $GITHUB_OUTPUT
+
   process:
     needs: builder
     runs-on: ubuntu-latest
