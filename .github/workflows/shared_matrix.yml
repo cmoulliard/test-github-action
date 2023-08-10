@@ -30,7 +30,9 @@ jobs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
     steps:
       - id: set-matrix
-        run: echo "matrix={\"include\":[{\"project\":\"foo\",\"config\":\"Debug\"},{\"project\":\"bar\",\"config\":\"Release\"}]}" >> $GITHUB_OUTPUT
+        run: |
+          echo "matrix={\"include\":[{\"project\":\"foo\",\"config\":\"Debug\"},{\"project\":\"bar\",\"config\":\"Release\"}]}" >> $GITHUB_OUTPUT
+          echo "matrix={\"include\":[{\"builder-image\":\"paketobuildpacks/builder-jammy-tiny:0.0.175\"},{\"builder-image\":\"paketobuildpacks/builder-jammy-tiny:0.0.173\"}]}" >> $GITHUB_OUTPUT
   job2:
     needs: job1
     runs-on: ubuntu-latest
@@ -39,6 +41,7 @@ jobs:
     steps:
       - run: |
           echo "Project: ${{ matrix.project }}"
+          echo "Project: ${{ matrix.builder-image }}"
   runner:
     #needs: [ builder ]
     runs-on: ubuntu-latest
@@ -53,20 +56,3 @@ jobs:
       - run: |
           echo "Token: ${{ steps.env-setup.outputs.env_token }}"
           echo "Domain: ${{ steps.env-setup.outputs.env_domain }}"
-      #- id: env-setup
-      #  run: |
-      #    {
-      #      "env_token=production"
-      #      "env_domain=example.com"
-      #    } >> $GITHUB_OUTPUT
-      #
-      #    {
-      #      "params": {
-      #         "builder-image": "paketobuildpacks/builder-jammy-tiny:0.0.175",
-      #         "builder-image": "paketobuildpacks/builder-jammy-tiny:0.0.173"
-      #      }
-      #    } >> $GITHUB_OUTPUT
-      #- run: |
-      #    echo "${{ steps.env-setup.outputs.env_token }}"
-      #    echo "${{ steps.env-setup.outputs.env_domain }}"
-      #    echo "${{ steps.env-setup.outputs.params }}"
