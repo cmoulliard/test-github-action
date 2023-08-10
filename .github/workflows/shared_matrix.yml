@@ -46,8 +46,8 @@ jobs:
           "| env_domain | $env_domain |"
           ' >> $GITHUB_STEP_SUMMARY
       - run: |
-          echo "${{ steps.env-setup.outputs.env_token }}"
-          echo "${{ steps.env-setup.outputs.env_domain }}"
+          echo "Token: ${{ steps.env-setup.outputs.env_token }}"
+          echo "Domain: ${{ steps.env-setup.outputs.env_domain }}"
       #- id: env-setup
       #  run: |
       #    {
