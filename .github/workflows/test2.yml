@@ -6,19 +6,22 @@ jobs:
   job1:
     runs-on: ubuntu-latest
     outputs:
-      matrix: ${{ steps.set-matrix.outputs.matrix }}
+      mymatrix: ${{ steps.set-matrix.outputs.matrix }}
     steps:
       - id: set-matrix
         run: |
-          #echo 'matrix={"include":[{"project":"foo","config":"Debug"},{"project":"bar","config":"Release"}]}' >> $GITHUB_OUTPUT
-          echo 'matrix={"include":{"builder-image":"paketobuildpacks/builder-jammy-tiny:0.0.175","pack_cli_version":"v0.30.0-rc1"}}' >> $GITHUB_OUTPUT
+          # Syntax is working
+          # echo 'matrix={"include":[{"project":"foo","config":"Debug"},{"project":"bar","config":"Release"}]}' >> $GITHUB_OUTPUT
+          
+          # This syntax reports a : A mapping was not expected
+          echo 'params={"builder-image":"paketobuildpacks/builder-jammy-tiny:0.0.175","pack_cli_version":"v0.30.0-rc1"}' >> $GITHUB_OUTPUT
 
   job2:
     needs: job1
     runs-on: ubuntu-latest
     strategy:
-      matrix: ${{ fromJSON(needs.job1.outputs.matrix) }}
+      matrix: ${{ fromJSON(needs.job1.outputs.mymatrix) }}
     steps:
       - run: |
-          echo "Builder image: ${{ matrix.builder-image }}"
-          echo "Pack client image: ${{ matrix.pack_cli_version }}"
+          echo "Builder image: ${{ matrix.params.builder-image }}"
+          echo "Pack client image: ${{ matrix.params.pack_cli_version }}"
