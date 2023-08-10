@@ -18,7 +18,8 @@ jobs:
       - id: set-matrix
         env:
           CFG: ${{ toJSON(matrix.cfg) }}
-        run: jq -r -n 'env.CFG | fromjson | @json "::set-output name=result::\(.data)"'
+        run: |
+          jq -r -n 'env.CFG | fromjson
 
   runner:
     needs: [ builder ]
