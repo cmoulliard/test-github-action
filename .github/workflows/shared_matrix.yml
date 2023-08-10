@@ -8,12 +8,12 @@ jobs:
   builder:
     name: set matrix
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        cfg:
-          - data:
-            - { builder-image: paketobuildpacks/builder-jammy-tiny:0.0.175 }
-            - { builder-image: paketobuildpacks/builder-jammy-tiny:0.0.173 }
+    #strategy:
+    #  matrix:
+    #    cfg:
+    #      - data:
+    #        - { builder-image: paketobuildpacks/builder-jammy-tiny:0.0.175 }
+    #        - { builder-image: paketobuildpacks/builder-jammy-tiny:0.0.173 }
     outputs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
     steps:
