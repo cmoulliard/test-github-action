@@ -6,23 +6,24 @@ on:
 
 jobs:
   builder:
-    name: set-matrix
+    name: set matrix
     strategy:
       matrix:
         cfg:
-          - { builder-image: paketobuildpacks/builder-jammy-tiny:0.0.175 }
+          - { builder-image: "paketobuildpacks/builder-jammy-tiny:0.0.175" }
     outputs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
     steps:
       - id: set-matrix
-        run: echo "::set-output name=matrix::${{ toJson(matrix.cfg) }}"
+        env:
+          CFG: ${{ toJSON(matrix.cfg) }}
+        run: jq -r -n 'env.CFG | fromjson | @json "::set-output name=result::\(.data)"'
 
   runner:
     needs: [ builder ]
     strategy:
       matrix:
-        cfg:
-          - ${{ fromJson(needs.builder.outputs.matrix) }}
+        cfg: ${{ fromJson(needs.builder.outputs.matrix) }}
     steps:
       - run: |
           echo  "Builder-image: ${{ matrix.cfg.builder-image }}"
