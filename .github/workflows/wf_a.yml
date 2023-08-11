@@ -35,6 +35,6 @@ jobs:
 
       - id: step3
         run: |
-          matrix=$(yq -P -o=json config.yaml | jq -c .)" 
+          matrix=$(yq -P -o=json config.yaml | jq -c .)
           echo $matrix
           echo $matrix >> $GITHUB_OUTPUT
