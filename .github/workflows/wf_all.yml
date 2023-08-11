@@ -21,5 +21,5 @@ jobs:
     steps:
       - run: |
           echo "Matrix: ${{ matrix.project }}"
-          cfg="${{ fromJSON(needs.jobProd.outputs.matrix) }}"
+          cfg=$(echo ${{ fromJSON(needs.jobProd.outputs.matrix) }})
           echo "Cfg: $cfg"
