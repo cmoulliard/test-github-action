@@ -34,6 +34,7 @@ jobs:
         run: echo "secondword=world" >> $GITHUB_OUTPUT
 
       - id: step3
+        name: Convert config from YAML to JSON and pass it as value to matrix
         run: |
           matrix="matrix=$(yq -P -o=json config.yaml | jq -c .)"
           echo $matrix
