@@ -15,7 +15,7 @@ on:
         value: ${{ jobs.reuse.outputs.matrix }}
 
 jobs:
-  reuse:
+  generate-json-matrix:
     name: Generate output
     runs-on: ubuntu-latest
     # Map the job outputs to step outputs
