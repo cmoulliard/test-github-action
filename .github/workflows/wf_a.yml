@@ -53,7 +53,7 @@ jobs:
     needs: jobProd
     runs-on: ubuntu-latest
     strategy:
-      matrix: ${{ fromJSON(needs.job1.outputs.matrix) }}
+      matrix: ${{ fromJSON(needs.jobProd.outputs.matrix) }}
     steps:
       - run: |
           echo "Matrix: ${{ matrix.project }}"
