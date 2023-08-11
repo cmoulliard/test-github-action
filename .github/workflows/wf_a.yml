@@ -1,0 +1,16 @@
+name: Workflow A
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  jobA:
+    runs-on: ubuntu-latest
+    outputs:
+      myOutput: ${{ steps.stepA.outputs.myValue }}
+    steps:
+      - name: Step A
+        id: stepA
+        run: echo "myValue=Hello from Workflow A" >> $GITHUB_OUTPUT

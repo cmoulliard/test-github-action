@@ -1,0 +1,16 @@
+name: Workflow B
+
+on:
+  workflow_run:
+    workflows: ["Workflow A"]
+    types:
+      - completed
+
+jobs:
+  jobB:
+    needs: workflow_run.workflowA.outputs.jobA
+    runs-on: ubuntu-latest
+    steps:
+      - name: Step B
+        run: |
+          echo "Output from Workflow A: ${{ needs.workflow_run.workflowA.outputs.jobA }}"
