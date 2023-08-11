@@ -35,9 +35,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: job1
     strategy:
-      # Fails as we got too as error: unexpected EOF while looking for matching `"'
-      # matrix: ${{ fromJSON(needs.job1.outputs.matrix) }}
-      matrix: ${{ needs.job1.outputs.matrix }}
+      matrix: ${{ fromJSON(needs.job1.outputs.matrix) }}
     steps:
       - name: Log HelloWorld Message
         run: |
