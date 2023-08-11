@@ -50,7 +50,7 @@ jobs:
         run: |
           echo "matrix={\"include\":[{\"project\":\"foo\",\"config\":\"Debug\"},{\"project\":\"bar\",\"config\":\"Release\"}]}" >> $GITHUB_OUTPUT
   jobCons:
-    needs: job1
+    needs: jobProd
     runs-on: ubuntu-latest
     strategy:
       matrix: ${{ fromJSON(needs.job1.outputs.matrix) }}
