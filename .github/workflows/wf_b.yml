@@ -12,9 +12,9 @@ jobs:
     runs-on: ubuntu-latest
     # Map the job outputs to step outputs
     outputs:
-      output1: ${{ steps.step1.outputs.firstword }}
-      output2: ${{ steps.step2.outputs.secondword }}
-      output3: ${{ steps.step3.outputs.matrix }}
+      firstword: ${{ steps.step1.outputs.firstword }}
+      secondword: ${{ steps.step2.outputs.secondword }}
+      matrix: ${{ steps.step3.outputs.matrix }}
     steps:
       - name: Checkout to repository
         uses: actions/checkout@v3
