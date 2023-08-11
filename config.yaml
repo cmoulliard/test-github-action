@@ -29,7 +29,13 @@
 include:
   - builder-image: "paketobuildpacks/builder-jammy-tiny:0.0.173"
     pack_cli_version: "v0.30.0-rc1"
-    java: ["11","17"]
+    # The following syntax is not supported and will generate an array object when you echo: "Java version: Array"
+    # java: ["11","17"]
+    # It is then needed to populate yourself all the combinations as we do hereafter
+    java: "11"
   - builder-image: "paketobuildpacks/builder-jammy-tiny:0.0.175"
     pack_cli_version: "v0.30.0"
-    java: ["11"]
+    java: "11"
+  - builder-image: "paketobuildpacks/builder-jammy-tiny:0.0.175"
+    pack_cli_version: "v0.30.0"
+    java: "17"
