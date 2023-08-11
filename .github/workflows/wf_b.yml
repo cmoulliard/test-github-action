@@ -37,19 +37,18 @@ jobs:
     #strategy:
     #  matrix: ${{ fromJSON(needs.job1.outputs.matrix) }}
     steps:
-      - name: Log HelloWorld Message & JSON matrix ...
+      - name: Log HelloWorld Message
         run: |
-          set -x
-          echo "#########################################"
           echo "Message: ${{ needs.job1.outputs.firstword }} ${{ needs.job1.outputs.secondword }}"
-          
-          echo "#########################################"
-          echo "Matrix: ${{ needs.job1.outputs.matrix }}"
-          
-          jsonMatrix="${{ fromJSON(needs.job1.outputs.matrix) }}"
-          echo "Matrix fromJSON: $jsonMatrix"
-          
-          echo "#########################################"
-          echo "Matrix parsed using jq: "
+
+      - name: Log matrix & jq it
+        run: |  
+          jsonMatrix="${{ needs.job1.outputs.matrix }}"
+          echo "Matrix: $jsonMatrix"
           echo $jsonMatrix | jq -r .
-          echo "#########################################"
+
+      - name: Log fromJSON(matrix) & jq it
+        run: |
+          jsonMatrix="${{ fromJSON(needs.job1.outputs.matrix) }}"
+          echo "Matrix: $jsonMatrix"
+          echo $jsonMatrix | jq -r .
