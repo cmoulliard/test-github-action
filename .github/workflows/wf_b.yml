@@ -8,7 +8,7 @@ on:
 
 jobs:
   jobB:
-    needs: workflow_run.workflowA.outputs.jobA
+    #needs: workflow_run.workflowA.outputs.jobA
     runs-on: ubuntu-latest
     steps:
       - name: Step B
