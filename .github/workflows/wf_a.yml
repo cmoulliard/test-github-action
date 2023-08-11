@@ -6,13 +6,13 @@ on:
     outputs:
       firstword:
         description: "The first output string"
-        value: ${{ jobs.reuse.outputs.output1 }}
+        value: ${{ jobs.generate-json-matrix.outputs.output1 }}
       secondword:
         description: "The second output string"
-        value: ${{ jobs.reuse.outputs.output2 }}
+        value: ${{ jobs.generate-json-matrix.outputs.output2 }}
       matrix:
         description: "Matrix of configurations"
-        value: ${{ jobs.reuse.outputs.matrix }}
+        value: ${{ jobs.generate-json-matrix.outputs.matrix }}
 
 jobs:
   generate-json-matrix:
