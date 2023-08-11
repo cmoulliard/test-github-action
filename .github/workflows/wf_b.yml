@@ -48,6 +48,7 @@ jobs:
           echo $jsonMatrix | jq -r .
 
       - name: Log fromJSON(matrix) & jq it
+        if: always()
         run: |
           jsonMatrix=${{ fromJSON(needs.job1.outputs.matrix) }}
           echo "Matrix: $jsonMatrix"
