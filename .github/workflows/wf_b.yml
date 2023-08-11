@@ -10,7 +10,10 @@ jobs:
   job2:
     runs-on: ubuntu-latest
     needs: job1
+    strategy:
+      matrix: ${{ fromJSON(needs.job1.outputs.matrix) }}
     steps:
       - run: echo ${{ needs.job1.outputs.firstword }} ${{ needs.job1.outputs.secondword }}
       - run: |
-          echo "Builder image: ${{ needs.job1.outputs.matrix }}"
+          echo "Builder image: ${{ matrix.builder-image }}"
+          echo "Pack client image: ${{ matrix.pack_cli_version }}"
