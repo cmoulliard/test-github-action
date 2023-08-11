@@ -43,17 +43,23 @@ jobs:
         run: |
           echo "Message: ${{ needs.job1.outputs.firstword }} ${{ needs.job1.outputs.secondword }}"
 
+      - name: Log Java version
+        if: always()
+        run: |
+          echo "Java version: ${{ matrix.java }}"
+
       - name: Log Builder image
         if: always()
         run: |
           echo "Builder image: ${{ matrix.builder-image }}"
 
-      - name: Log matrix & jq it
-        if: always()
-        run: |  
-          jsonMatrix='${{ needs.job1.outputs.matrix }}'
-          echo $jsonMatrix
-          echo $jsonMatrix | jq -r .
+      # TO BE USED TO LOG MATRIX CONTENT
+      #- name: Log matrix & jq it
+      #   if: always()
+      #   run: |
+      #     jsonMatrix='${{ needs.job1.outputs.matrix }}'
+      #     echo $jsonMatrix
+      #     echo $jsonMatrix | jq -r .
 
       # Fails as we got an object which cannot be jq processed
       # jsonMatrix='Object'

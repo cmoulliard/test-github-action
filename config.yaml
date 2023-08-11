@@ -29,5 +29,7 @@
 include:
   - builder-image: "paketobuildpacks/builder-jammy-tiny:0.0.173"
     pack_cli_version: "v0.30.0-rc1"
+    java: ["11","17"]
   - builder-image: "paketobuildpacks/builder-jammy-tiny:0.0.175"
     pack_cli_version: "v0.30.0"
+    java: ["11"]
