@@ -19,7 +19,7 @@ jobs:
           #echo 'matrix={"builder-image":"paketobuildpacks/builder-jammy-tiny:0.0.175","pack_cli_version":"v0.30.0-rc1"}' >> $GITHUB_OUTPUT
           
           # This syntax works -> see comment withing config.yaml
-          echo "matrix=$(yq -P -o=json config.yaml | jq -c ." >> $GITHUB_OUTPUT
+          echo "matrix=$(yq -P -o=json config.yaml | jq -c .)" >> $GITHUB_OUTPUT
 
   job1:
     needs: configure
