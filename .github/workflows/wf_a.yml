@@ -24,10 +24,15 @@ jobs:
       output2: ${{ steps.step2.outputs.secondword }}
       output3: ${{ steps.step3.outputs.matrix }}
     steps:
+      - name: Checkout to repository
+        uses: actions/checkout@v3
+
       - id: step1
         run: echo "firstword=hello" >> $GITHUB_OUTPUT
+
       - id: step2
         run: echo "secondword=world" >> $GITHUB_OUTPUT
+
       - id: step3
         run: |
           echo "matrix=$(yq -P -o=json config.yaml | jq -c .)" >> $GITHUB_OUTPUT
