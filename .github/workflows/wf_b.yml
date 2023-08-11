@@ -10,8 +10,8 @@ jobs:
   job2:
     runs-on: ubuntu-latest
     needs: job1
-    strategy:
-      matrix: ${{ fromJSON(needs.job1.outputs.matrix) }}
+    #strategy:
+    #  matrix: ${{ fromJSON(needs.job1.outputs.matrix) }}
     steps:
       - name: Log Hello World message
         run: |
@@ -19,8 +19,7 @@ jobs:
 
       - name: Log JSON matrix
         run: |
-          echo "Project: ${{ matrix.project }}"
-          #echo "builder-image: ${{ needs.job1.outputs.matrix.include }}"
+          echo "builder-image: ${{ needs.job1.outputs.matrix }}.include"
           #echo "Project: ${{ needs.job1.outputs.project }}"
           
           #echo "Builder image: ${{ matrix.builder-image }}"

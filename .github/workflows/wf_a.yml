@@ -40,20 +40,3 @@ jobs:
           echo $matrix
           #echo $matrix >> $GITHUB_OUTPUT
           echo "matrix={\"include\":[{\"project\":\"foo\",\"config\":\"Debug\"},{\"project\":\"bar\",\"config\":\"Release\"}]}" >> $GITHUB_OUTPUT
-
-  jobProd:
-    runs-on: ubuntu-latest
-    outputs:
-      matrix: ${{ steps.set-matrix.outputs.matrix }}
-    steps:
-      - id: set-matrix
-        run: |
-          echo "matrix={\"include\":[{\"project\":\"foo\",\"config\":\"Debug\"},{\"project\":\"bar\",\"config\":\"Release\"}]}" >> $GITHUB_OUTPUT
-  jobCons:
-    needs: jobProd
-    runs-on: ubuntu-latest
-    strategy:
-      matrix: ${{ fromJSON(needs.jobProd.outputs.matrix) }}
-    steps:
-      - run: |
-          echo "Matrix: ${{ matrix.project }}"
