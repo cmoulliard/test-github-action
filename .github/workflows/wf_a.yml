@@ -10,6 +10,9 @@ on:
       secondword:
         description: "The second output string"
         value: ${{ jobs.reuse.outputs.output2 }}
+      matrix:
+        description: "Matrix of configurations"
+        value: ${{ jobs.reuse.outputs.matrix }}
 
 jobs:
   reuse:
@@ -19,8 +22,12 @@ jobs:
     outputs:
       output1: ${{ steps.step1.outputs.firstword }}
       output2: ${{ steps.step2.outputs.secondword }}
+      output3: ${{ steps.step3.outputs.matrix }}
     steps:
       - id: step1
         run: echo "firstword=hello" >> $GITHUB_OUTPUT
       - id: step2
         run: echo "secondword=world" >> $GITHUB_OUTPUT
+      - id: step3
+        run: |
+          echo "matrix=$(yq -P -o=json config.yaml | jq -c .)" >> $GITHUB_OUTPUT
