@@ -13,4 +13,4 @@ jobs:
     steps:
       - run: echo ${{ needs.job1.outputs.firstword }} ${{ needs.job1.outputs.secondword }}
       - run: |
-          echo "Builder image: ${{ needs.job1.outputs.matrix.builder-image }}"
+          echo "Builder image: ${{ needs.job1.outputs.matrix }}"
