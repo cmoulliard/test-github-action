@@ -16,7 +16,7 @@ jobs:
       - run: |
           echo ${{ needs.job1.outputs.firstword }} ${{ needs.job1.outputs.secondword }}
           
-          echo "Matrix: ${{ needs.job1.outputs.matrix) }}"
+          echo "Matrix: ${{ needs.job1.outputs.matrix }}"
           
           #echo "Builder image: ${{ matrix.builder-image }}"
           #echo "Pack client image: ${{ matrix.pack_cli_version }}"
