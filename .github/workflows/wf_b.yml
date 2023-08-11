@@ -44,12 +44,12 @@ jobs:
       - name: Log matrix & jq it
         run: |  
           jsonMatrix=${{ needs.job1.outputs.matrix }}
-          echo "Matrix: $jsonMatrix"
+          echo $jsonMatrix
           echo $jsonMatrix | jq -r .
 
       - name: Log fromJSON(matrix) & jq it
         if: always()
         run: |
           jsonMatrix=${{ fromJSON(needs.job1.outputs.matrix) }}
-          echo "Matrix: $jsonMatrix"
+          echo $jsonMatrix"
           echo $jsonMatrix | jq -r .
