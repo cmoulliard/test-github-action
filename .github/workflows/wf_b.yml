@@ -43,5 +43,5 @@ jobs:
           echo "Message: ${{ needs.job1.outputs.firstword }} ${{ needs.job1.outputs.secondword }}"
           echo "#########################################"
           echo "Matrix: ${{ needs.job1.outputs.matrix }}"
-          echo ${{ needs.job1.outputs.matrix }} | jq -r .
+          echo ${{ fromJSON(needs.job1.outputs.matrix) }} | jq -r .
           echo "#########################################"
