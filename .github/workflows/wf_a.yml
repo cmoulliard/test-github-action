@@ -10,9 +10,9 @@ on:
       secondword:
         description: "The second output string"
         value: ${{ jobs.reuse.outputs.output2 }}
-      cfg:
+      matrix:
         description: "Matrix of configurations"
-        value: ${{ jobs.reuse.outputs.cfg }}
+        value: ${{ jobs.reuse.outputs.matrix }}
 
 jobs:
   reuse:
@@ -22,7 +22,7 @@ jobs:
     outputs:
       output1: ${{ steps.step1.outputs.firstword }}
       output2: ${{ steps.step2.outputs.secondword }}
-      output3: ${{ steps.step3.outputs.cfg }}
+      output3: ${{ steps.step3.outputs.matrix }}
     steps:
       - name: Checkout to repository
         uses: actions/checkout@v3
@@ -36,7 +36,6 @@ jobs:
       - id: step3
         name: Convert config from YAML to JSON and pass it as value to matrix
         run: |
-          matrix="cfg=$(yq -P -o=json config.yaml | jq -c .)"
+          matrix="matrix=$(yq -P -o=json config.yaml | jq -c .)"
           echo $matrix
           echo $matrix >> $GITHUB_OUTPUT
-          #echo "matrix={\"include\":[{\"project\":\"foo\",\"config\":\"Debug\"},{\"project\":\"bar\",\"config\":\"Release\"}]}" >> $GITHUB_OUTPUT
