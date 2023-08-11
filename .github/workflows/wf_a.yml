@@ -38,8 +38,10 @@ jobs:
         run: |
           matrix="matrix=$(yq -P -o=json config.yaml | jq -c .)"
           echo $matrix
-          echo $matrix >> $GITHUB_OUTPUT
-  job1:
+          #echo $matrix >> $GITHUB_OUTPUT
+          echo "matrix={\"include\":[{\"project\":\"foo\",\"config\":\"Debug\"},{\"project\":\"bar\",\"config\":\"Release\"}]}" >> $GITHUB_OUTPUT
+
+  jobProd:
     runs-on: ubuntu-latest
     outputs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
@@ -47,7 +49,7 @@ jobs:
       - id: set-matrix
         run: |
           echo "matrix={\"include\":[{\"project\":\"foo\",\"config\":\"Debug\"},{\"project\":\"bar\",\"config\":\"Release\"}]}" >> $GITHUB_OUTPUT
-  job2:
+  jobCons:
     needs: job1
     runs-on: ubuntu-latest
     strategy:
