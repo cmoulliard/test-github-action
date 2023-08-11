@@ -8,31 +8,6 @@ jobs:
   job1:
     uses: ./.github/workflows/wf_a.yml
 
-  # THIS JOB WORKS AND CAN REUSE MATRIX AS STRATEGY FROM JOB A
-  #job1:
-  #  name: Generate output
-  #  runs-on: ubuntu-latest
-  #  # Map the job outputs to step outputs
-  #  outputs:
-  #    firstword: ${{ steps.step1.outputs.firstword }}
-  #    secondword: ${{ steps.step2.outputs.secondword }}
-  #    matrix: ${{ steps.step3.outputs.matrix }}
-  #  steps:
-  #    - name: Checkout to repository
-  #      uses: actions/checkout@v3
-  #
-  #    - id: step1
-  #      run: echo "firstword=hello" >> $GITHUB_OUTPUT
-  #
-  #    - id: step2
-  #      run: echo "secondword=world" >> $GITHUB_OUTPUT
-  #
-  #    - id: step3
-  #      name: Convert config from YAML to JSON and pass it as value to matrix
-  #      run: |
-  #        matrix="matrix=$(yq -P -o=json config.yaml | jq -c .)"
-  #        echo $matrix
-  #        echo $matrix >> $GITHUB_OUTPUT
   job2:
     runs-on: ubuntu-latest
     needs: job1
@@ -59,19 +34,5 @@ jobs:
       #   run: |
       #     jsonMatrix='${{ needs.job1.outputs.matrix }}'
       #     echo $jsonMatrix
-      #     echo $jsonMatrix | jq -r .
-
-      # Fails as we got an object which cannot be jq processed
-      # jsonMatrix='Object'
-      #  echo $jsonMatrix"
-      #  echo $jsonMatrix | jq -r .
-      #  shell: /usr/bin/bash -e {0}
-      #/home/runner/work/_temp/2193496a-decc-48ba-accb-5adcce579403.sh: line 2: unexpected EOF while looking for matching `"'
-      #
-      # - name: Log fromJSON(matrix) & jq it
-      #   if: always()
-      #   run: |
-      #     jsonMatrix='${{ fromJSON(needs.job1.outputs.matrix) }}'
-      #     echo $jsonMatrix"
       #     echo $jsonMatrix | jq -r .
 
