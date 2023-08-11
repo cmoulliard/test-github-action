@@ -21,4 +21,4 @@ jobs:
     steps:
       - run: |
           echo "Project: ${{ matrix.project }}"
-          echo ${{ needs.jobProd.outputs.matrix }} | jq -r .
+          echo '${{ needs.jobProd.outputs.matrix }}' | jq -r .include
