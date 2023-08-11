@@ -20,7 +20,7 @@ jobs:
       - name: Log JSON matrix
         run: |
           set -x
-          echo "Matrix: ${{ needs.job1.outputs.matrix }}
+          echo "Matrix: ${{ needs.job1.outputs.matrix }}"
           #echo "Project: ${{ needs.job1.outputs.project }}"
           
           #echo "Builder image: ${{ matrix.builder-image }}"
