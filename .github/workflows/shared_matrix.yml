@@ -2,7 +2,7 @@ name: Test shared matrix
 
 on:
   push:
-    branch: test
+    branches: test
 
 jobs:
   configure:
