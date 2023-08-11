@@ -6,13 +6,13 @@ on:
     outputs:
       firstword:
         description: "The first output string"
-        value: ${{ jobs.job1.outputs.output1 }}
+        value: ${{ jobs.reuse.outputs.output1 }}
       secondword:
         description: "The second output string"
-        value: ${{ jobs.job1.outputs.output2 }}
+        value: ${{ jobs.reuse.outputs.output2 }}
 
 jobs:
-  job1:
+  reuse:
     name: Generate output
     runs-on: ubuntu-latest
     # Map the job outputs to step outputs
