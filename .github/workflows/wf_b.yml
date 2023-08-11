@@ -20,8 +20,6 @@ jobs:
       - name: Log JSON matrix
         run: |
           set -x
-          echo "Matrix: ${{ needs.job1.outputs.matrix }}"
-          #echo "Project: ${{ needs.job1.outputs.project }}"
-          
-          #echo "Builder image: ${{ matrix.builder-image }}"
-          #echo "Pack client image: ${{ matrix.pack_cli_version }}"
+          echo "Matrix: ${{ needs.job1.outputs.cfg }}"
+          echo "Matrix: ${{ needs.job1.outputs }}"
+          set +x
