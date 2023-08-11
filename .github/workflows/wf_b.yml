@@ -13,13 +13,11 @@ jobs:
     #strategy:
     #  matrix: ${{ fromJSON(needs.job1.outputs.matrix) }}
     steps:
-      - name: Log Hello World message
+      - name: Log HelloWorld Message & JSON matrix ...
         run: |
-          echo "Message: ${{ needs.job1.outputs.firstword }} ${{ needs.job1.outputs.secondword }}"
-
-      - name: Log JSON matrix
-        run: |
-          echo "${{ needs.job1.outputs.matrix }}"
-          echo '${{ needs.job1.outputs.matrix }}'
+          echo "Matrix: ${{ needs.job1.outputs.matrix }}"
+          echo 'Matrix: ${{ needs.job1.outputs.matrix }}'
           echo "${{ needs.job1.outputs.matrix }}" | jq -r .include
           echo "${{ needs.job1.outputs.matrix }}" | jq -r .
+          
+          echo "Message: ${{ needs.job1.outputs.firstword }} ${{ needs.job1.outputs.secondword }}"
