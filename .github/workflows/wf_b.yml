@@ -4,9 +4,11 @@ on:
   workflow_dispatch:
 
 jobs:
+  # THIS JOB WORKS AND CAN REUSE MATRIX AS STRATEGY FROM JOB A
   job1:
     uses: ./.github/workflows/wf_a.yml
-  # THIS BOB WWORKS
+
+  # THIS JOB WORKS AND CAN REUSE MATRIX AS STRATEGY FROM JOB A
   #job1:
   #  name: Generate output
   #  runs-on: ubuntu-latest
