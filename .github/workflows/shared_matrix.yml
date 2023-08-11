@@ -10,19 +10,16 @@ jobs:
     steps:
       - name: Checkout to repository
         uses: actions/checkout@v3
-      - name: yaml-to-json
-        run: |
-          yq -P -o=json config.yaml > config.json
       - id: set-matrix
         run: |
           # Syntax is working
-          # echo 'matrix={"include":[{"project":"foo","config":"Debug"},{"project":"bar","config":"Release"}]}' >> $GITHUB_OUTPUT
+          # echo 'matrix={"include":[{"builder-image":"paketobuildpacks/builder-jammy-tiny:0.0.175","pack_cli_version":"v0.30.0-rc1"}]}' >> $GITHUB_OUTPUT
           
-          # This syntax reports a : A mapping was not expected
-          #echo 'params={"builder-image":"paketobuildpacks/builder-jammy-tiny:0.0.175","pack_cli_version":"v0.30.0-rc1"}' >> $GITHUB_OUTPUT
+          # This syntax dot not work and job reports: A mapping was not expected
+          #echo 'matrix={"builder-image":"paketobuildpacks/builder-jammy-tiny:0.0.175","pack_cli_version":"v0.30.0-rc1"}' >> $GITHUB_OUTPUT
           
           # This syntax works -> see comment withing config.yaml
-          echo "matrix=$(jq -c . < ./config.json)" >> $GITHUB_OUTPUT
+          echo "matrix=$(yq -P -o=json config.yaml | jq -c ." >> $GITHUB_OUTPUT
 
   job1:
     needs: configure
