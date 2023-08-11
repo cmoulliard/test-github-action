@@ -19,5 +19,7 @@ jobs:
 
       - name: Log JSON matrix
         run: |
+          echo "${{ needs.job1.outputs.matrix }}"
+          echo '${{ needs.job1.outputs.matrix }}'
           echo "${{ needs.job1.outputs.matrix }}" | jq -r .include
           echo "${{ needs.job1.outputs.matrix }}" | jq -r .
