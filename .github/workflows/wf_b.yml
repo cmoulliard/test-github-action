@@ -13,9 +13,12 @@ jobs:
     #strategy:
     #  matrix: ${{ fromJSON(needs.job1.outputs.matrix) }}
     steps:
-      - run: |
-          echo ${{ needs.job1.outputs.firstword }} ${{ needs.job1.outputs.secondword }}
-          
+      - name: Log Hello World message
+        run: |
+          echo "Message: ${{ needs.job1.outputs.firstword }} ${{ needs.job1.outputs.secondword }}"
+
+      - name: Log JSON matrix
+        run: |    
           echo "Matrix: ${{ needs.job1.outputs.matrix }}"
           
           #echo "Builder image: ${{ matrix.builder-image }}"
