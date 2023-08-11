@@ -1,4 +1,5 @@
-name: Workflow B
+name: WorkflowB
+id: WorkflowB
 
 on:
   workflow_run:
@@ -9,6 +10,7 @@ on:
 jobs:
   jobB:
     #needs: workflow_run.workflowA.outputs.jobA
+    needs: WorkflowA.jobA.outputs.myOutput
     runs-on: ubuntu-latest
     steps:
       - name: Step B
