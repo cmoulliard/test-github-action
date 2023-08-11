@@ -19,7 +19,4 @@ jobs:
 
       - name: Log JSON matrix
         run: |
-          set -x
-          echo "Cfg: ${{ needs.job1.outputs.cfg }}"
-          obj="${{ needs.job1.outputs }}"
-          echo $obj | jq -r .
+          echo '${{ needs.job1.outputs.cfg }}' | jq -r .include.
