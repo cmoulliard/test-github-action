@@ -19,7 +19,7 @@ jobs:
 
       - name: Log JSON matrix
         run: |
-          echo "builder-image: ${{ needs.job1.outputs.matrix }}.include"
+          echo "Matrix: ${{ fromJSON(needs.job1.outputs.matrix ) }}
           #echo "Project: ${{ needs.job1.outputs.project }}"
           
           #echo "Builder image: ${{ matrix.builder-image }}"
