@@ -1,5 +1,4 @@
 name: Workflow A
-id: WorkflowA
 
 on:
   push:

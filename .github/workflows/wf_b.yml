@@ -1,5 +1,4 @@
 name: WorkflowB
-id: WorkflowB
 
 on:
   workflow_run:
