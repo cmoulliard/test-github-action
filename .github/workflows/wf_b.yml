@@ -46,7 +46,7 @@ jobs:
       - name: Log Builder image
         if: always()
         run: |
-          echo "Builder image: ${{ matrix.builder-image }}
+          echo "Builder image: ${{ matrix.builder-image }}"
 
       - name: Log matrix & jq it
         if: always()
