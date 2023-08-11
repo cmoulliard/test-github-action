@@ -40,10 +40,8 @@ jobs:
       - name: Log HelloWorld Message & JSON matrix ...
         run: |
           echo "#########################################"
-          echo "Matrix: ${{ needs.job1.outputs.matrix }}"
-          echo 'Matrix: ${{ needs.job1.outputs.matrix }}'
-          echo "${{ needs.job1.outputs.matrix }}" | jq -r .include
-          echo "${{ needs.job1.outputs.matrix }}" | jq -r .
-          echo "#########################################"
           echo "Message: ${{ needs.job1.outputs.firstword }} ${{ needs.job1.outputs.secondword }}"
+          echo "#########################################"
+          echo "Matrix: ${{ needs.job1.outputs.matrix }}"
+          echo ${{ needs.job1.outputs.matrix }} | jq -r .
           echo "#########################################"
