@@ -39,3 +39,5 @@ jobs:
           matrix="matrix=$(yq -P -o=json config.yaml | jq -c .)"
           echo $matrix
           echo $matrix >> $GITHUB_OUTPUT
+          
+          echo 'name=json::{"a":1}'
