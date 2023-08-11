@@ -9,7 +9,7 @@ on:
 jobs:
   jobB:
     #needs: workflow_run.workflowA.outputs.jobA
-    needs: WorkflowA.jobA.outputs.myOutput
+    needs: workflowA.jobA.outputs.myOutput
     runs-on: ubuntu-latest
     steps:
       - name: Step B
