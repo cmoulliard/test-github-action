@@ -1,17 +1,14 @@
-name: WorkflowB
+name: Call a reusable workflow and use its outputs
 
 on:
-  workflow_run:
-    workflows: ["Workflow A"]
-    types:
-      - completed
+  workflow_dispatch:
 
 jobs:
-  jobB:
-    #needs: workflow_run.workflowA.outputs.jobA
-    needs: workflowA.jobA.outputs.myOutput
+  job1:
+    uses: ./.github/workflows/wf_a.yml
+
+  job2:
     runs-on: ubuntu-latest
+    needs: job1
     steps:
-      - name: Step B
-        run: |
-          echo "Output from Workflow A: ${{ needs.workflow_run.workflowA.outputs.jobA }}"
+      - run: echo ${{ needs.job1.outputs.firstword }} ${{ needs.job1.outputs.secondword }}
