@@ -21,4 +21,5 @@ jobs:
     steps:
       - run: |
           echo "Project: ${{ matrix.project }}"
-          echo "Cfg: ${{ fromJSON(needs.jobProd.outputs.matrix) }}"
+          echo "Cfg - fromJSON: ${{ fromJSON(needs.jobProd.outputs.matrix) }}"
+          echo "Cfg: ${{ needs.jobProd.outputs.matrix }}"
