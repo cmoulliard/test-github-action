@@ -35,7 +35,9 @@ jobs:
     runs-on: ubuntu-latest
     needs: job1
     strategy:
-      matrix: ${{ fromJSON(needs.job1.outputs.matrix) }}
+      # Fails as we got too as error: unexpected EOF while looking for matching `"'
+      # matrix: ${{ fromJSON(needs.job1.outputs.matrix) }}
+      matrix: ${{ needs.job1.outputs.matrix }}
     steps:
       - name: Log HelloWorld Message
         run: |
@@ -53,7 +55,7 @@ jobs:
           echo $jsonMatrix
           echo $jsonMatrix | jq -r .
 
-      # Fails:
+      # Fails as we got an object which cannot be jq processed
       # jsonMatrix='Object'
       #  echo $jsonMatrix"
       #  echo $jsonMatrix | jq -r .
