@@ -1,8 +1,7 @@
-name: Test shared matrix
+name: Test shared matrix between jobs - same workflow
 
 on:
-  push:
-    branches: test
+  workflow_dispatch:
 
 jobs:
   configure:
@@ -12,6 +11,7 @@ jobs:
     steps:
       - name: Checkout to repository
         uses: actions/checkout@v3
+
       - id: set-matrix
         run: |
           # Syntax is working
