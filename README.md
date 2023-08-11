@@ -1,4 +1,6 @@
-# test-github-action
+# Test GitHub actions
+
+Proiject aimed to test Github Workflows, actions, syntax, etc
 
 Testing locally how to share a matrix
 ```bash
