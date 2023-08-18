@@ -29,7 +29,7 @@ jobs:
         # Print decoded token information for debugging purposes
         echo $IDTOKEN | jq -R 'split(".") | .[1] | @base64d | fromjson'
     - name: Setup Kube Context
-      uses: azure/k8s-set-context@v2
+      uses: azure/k8s-set-context@v3
       with:
         method: kubeconfig
         kubeconfig: |
