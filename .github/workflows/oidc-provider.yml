@@ -54,8 +54,8 @@ jobs:
               user: oidc-token
     - name: Check Permissions in Kubernetes
       run: |
-        kubectl \
+        kubectl auth can-i --list --namespace cmoullia-tenant
         # --token=${{ steps.create-oidc-token.outputs.IDTOKEN }} \
         # --server=$ocp_cluster \
         # --certificate-authority=$cert \
-        auth can-i --list --namespace cmoullia-tenant
+        # auth can-i --list --namespace cmoullia-tenant
