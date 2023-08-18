@@ -39,8 +39,8 @@ jobs:
           clusters:
           - name: my-kubernetes-cluster
             cluster:
-              #certificate-authority-data: ${{ env.ocp_cluster }}
-              server: ${{ env.cert }}
+              #certificate-authority-data: ${{ env.cert }}
+              server: ${{ env.ocp_cluster }}
           users:
           - name: oidc-token
             user:
