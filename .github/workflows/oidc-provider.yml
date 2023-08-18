@@ -9,25 +9,59 @@ permissions:
 env:
   ocp_cluster: https://api-toolchain-host-operator.apps.stone-prd-host1.wdlc.p1.openshiftapps.com
   cert: "LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUMvakNDQWVhZ0F3SUJBZ0lCQURBTkJna3Foa2lHOXcwQkFRc0ZBREFWTVJNd0VRWURWUVFERXdwcmRXSmwKY201bGRHVnpNQjRYRFRJek1EZ3hNVEUyTURjd09Wb1hEVE16TURnd09ERTJNRGN3T1Zvd0ZURVRNQkVHQTFVRQpBeE1LYTNWaVpYSnVaWFJsY3pDQ0FTSXdEUVlKS29aSWh2Y05BUUVCQlFBRGdnRVBBRENDQVFvQ2dnRUJBSnRvCkJ3ODdFdXAraXcwSkQxNDQ4VXVXRjdHKzNQRDRQNGpuaHkyZzJlSjBoK1dWZ1JkQkRPWUk0Ulk3NS9OME5MNjcKd21vdGVFeHYxU2FBOURKT3Nqb1JvbFVCSVJWRWhES1BxMkt0akREMm1uY0FKOXVCWGdOU3Q5UWNTeHhTY2lsegpDNCs2YnN6Qkwyc003a0JxOXZ2dTkvS1FTc3psYTBkNDJYTkUxVzVOemFLUjNPMjAwclVjTndmSm1jdXFTWFc5Cng1Z3YvUTBrUUFaT1d2YVBWV3FRd25mU2JCMVpaRExYWHdPRktYRXM2U1NpZHRzTnZUMG9WNFBUQ2xMaENheWgKMnBqVU00V3NITGxveldDa2FKWVhFRnFkUE5PUUdhRUhzSEV0elp5MlU5cWtiSnJGMUo5WWp0T0NYUzc3NXF4KwpuMTBYOWRWMEtGVm5zM3I5M2hzQ0F3RUFBYU5aTUZjd0RnWURWUjBQQVFIL0JBUURBZ0trTUE4R0ExVWRFd0VCCi93UUZNQU1CQWY4d0hRWURWUjBPQkJZRUZOUTlpNERaN05LSjRZMWpOcTVEcTl3WWJobkhNQlVHQTFVZEVRUU8KTUF5Q0NtdDFZbVZ5Ym1WMFpYTXdEUVlKS29aSWh2Y05BUUVMQlFBRGdnRUJBRkkvSWFvTmk0cVV5bWJmOEZpQgpHM0RXNmxpNXhFckhUSnZ1VFUyd0RSczVkcERvU0p4MWh4bytGUWRSZDMyUnpwWTRHK1RybTBMS3RNRjZWRzdSCkMvNWNhQy9xUm1ETm5NNEdZamxST2VCTVF6VVFtOTRUYnRSUS9lMjhZeTlrZmRUNGpnRGZSVVJXcitOSHQwV1EKMU9rT1Fld2IrTWY2YmRZZWwvMDVsNXhvQ1pLUzN0dk5NSVN6dk9DY0NuRFJQNGpjOTI2aHhRM3dEdTI3Y0FFRwo4SmM1TzF4c1RZYkRaNHFqdkJWVDFYcFMzRU9nTk9WcldiRDdaQk1ZMDBJc3g2TEhLL3pkWFJSQ3pLUEMxbnIxCkx3TzRMd0VQd2JhVVNJVzlRRVk3NTUyVDBnQXRIb1VvbU9zUkhCWW51RXFnWWNvR1Fpb05FbS9FTXBUeDhrV0UKc0dZPQotLS0tLUVORCBDRVJUSUZJQ0FURS0tLS0tCg=="
+
 jobs:
   job:
     environment: Production
     runs-on: ubuntu-latest
     steps:
-    - name: Create Job OIDC Token
-      id: create-oidc-token
+    - name: Set manually the OIDC token
+      id: set-oidc-token-manually
       run: |
-        AUDIENCE="my-kubernetes-cluster"
-        OIDC_URL_WITH_AUDIENCE="$ACTIONS_ID_TOKEN_REQUEST_URL&audience=$AUDIENCE"
-        IDTOKEN=$(curl \
-          -H "Authorization: Bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" \
-          -H "Accept: application/json; api-version=2.0" \
-          "$OIDC_URL_WITH_AUDIENCE" | jq -r .value)
-        echo "::add-mask::${IDTOKEN}"
-        echo "idToken=${IDTOKEN}" >> $GITHUB_OUTPUT
-        
-        # Print decoded token information for debugging purposes
-        echo $IDTOKEN | jq -R 'split(".") | .[1] | @base64d | fromjson'
+        TOKEN='{
+             "exp": 1692374851,
+             "iat": 1692373951,
+             "auth_time": 1692356914,
+             "jti": "0dc1fcd3-0a7f-4ba8-8896-ff01b35ad7ac",
+             "iss": "https://sso.redhat.com/auth/realms/redhat-external",
+             "aud": "rhoas-cli-prod",
+             "sub": "f:528d76ff-f708-43ed-8cd5-fe16f4fe0ce6:cmoullia",
+             "typ": "ID",
+             "azp": "rhoas-cli-prod",
+             "nonce": "MrLBZcz9WkzvuquaOzMSr5AZhR9ev4o9cFSePmFEX-Q",
+             "session_state": "89e4acb0-6852-401a-bb3a-e657b821a20b",
+             "at_hash": "NbDM3a4FTvG9bvvP2fJR3Q",
+             "sid": "89e4acb0-6852-401a-bb3a-e657b821a20b",
+             "account_number": "6356775",
+             "is_internal": false,
+             "email_verified": true,
+             "preferred_username": "cmoullia",
+             "given_name": "Charles",
+             "locale": "en_US",
+             "is_org_admin": true,
+             "account_id": "50986588",
+             "org_id": "10977452",
+             "rh-user-id": "50986588",
+             "rh-org-id": "10977452",
+             "name": "Charles Moulliard",
+             "family_name": "Moulliard",
+             "email": "cmoullia@redhat.com"
+        }'
+        echo "IDTOKEN=${TOKEN}" >> $GITHUB_OUTPUT
+    #- name: Create Job OIDC Token
+    #  id: create-oidc-token
+    #  run: |
+    #    AUDIENCE="my-kubernetes-cluster"
+    #    OIDC_URL_WITH_AUDIENCE="$ACTIONS_ID_TOKEN_REQUEST_URL&audience=$AUDIENCE"
+    #    IDTOKEN=$(curl \
+    #      -H "Authorization: Bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" \
+    #      -H "Accept: application/json; api-version=2.0" \
+    #      "$OIDC_URL_WITH_AUDIENCE" | jq -r .value)
+    #    echo "::add-mask::${IDTOKEN}"
+    #    echo "IDTOKEN=${IDTOKEN}" >> $GITHUB_OUTPUT
+    #
+    #    # Print decoded token information for debugging purposes
+    #    echo $IDTOKEN | jq -R 'split(".") | .[1] | @base64d | fromjson'
     - name: Setup Kube Context
       uses: azure/k8s-set-context@v3
       with:
@@ -44,7 +78,7 @@ jobs:
           users:
           - name: oidc-token
             user:
-              token: ${{ steps.create-oidc-token.outputs.IDTOKEN }}
+              token: ${{ steps.set-oidc-token-manually.outputs.IDTOKEN }}
           contexts:
           - name: default
             context:
