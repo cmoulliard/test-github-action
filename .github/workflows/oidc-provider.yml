@@ -17,8 +17,7 @@ jobs:
           ACTIONS_ID_TOKEN_REQUEST_URL: 'https://sso.redhat.com/auth/realms/redhat-external/protocol/openid-connect/token'
         with:
           script: |
-            # Won't work as: Error: Error message: Unable to get ACTIONS_ID_TOKEN_REQUEST_URL env variable
+            # Won't work as: SyntaxError: Invalid or unexpected token
             const coredemo = require('@actions/core')
-            let ACTIONS_ID_TOKEN_REQUEST_URL
             let id_token = await coredemo.getIDToken()
             coredemo.setOutput('id_token', id_token)
