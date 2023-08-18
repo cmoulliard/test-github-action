@@ -29,10 +29,33 @@ jobs:
         
         # Print decoded token information for debugging purposes
         echo $IDTOKEN | jq -R 'split(".") | .[1] | @base64d | fromjson'
+    - name: Setup Kube Context
+      uses: azure/k8s-set-context@v2
+      with:
+        method: kubeconfig
+        kubeconfig: |
+          kind: Config
+          apiVersion: v1
+          current-context: default
+          clusters:
+          - name: my-kubernetes-cluster
+            cluster:
+              certificate-authority-data: $ocp_cluster
+              server: $cert
+          users:
+          - name: oidc-token
+            user:
+              token: ${{ steps.create-oidc-token.outputs.IDTOKEN }}
+          contexts:
+          - name: default
+            context:
+              cluster: my-kubernetes-cluster
+              namespace: demo
+              user: oidc-token
     - name: Check Permissions in Kubernetes
       run: |
         kubectl \
-        --token=${{ steps.create-oidc-token.outputs.IDTOKEN }} \
-        --server=$ocp_cluster \
-        --certificate-authority=$cert \
+        # --token=${{ steps.create-oidc-token.outputs.IDTOKEN }} \
+        # --server=$ocp_cluster \
+        # --certificate-authority=$cert \
         auth can-i --list --namespace cmoullia-tenant
