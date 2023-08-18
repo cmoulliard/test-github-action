@@ -15,39 +15,39 @@ jobs:
     environment: Production
     runs-on: ubuntu-latest
     steps:
-    - name: Set manually the OIDC token
-      id: set-oidc-token-manually
-      run: |
-        TOKEN='{
-             "exp": 1692374851,
-             "iat": 1692373951,
-             "auth_time": 1692356914,
-             "jti": "0dc1fcd3-0a7f-4ba8-8896-ff01b35ad7ac",
-             "iss": "https://sso.redhat.com/auth/realms/redhat-external",
-             "aud": "rhoas-cli-prod",
-             "sub": "f:528d76ff-f708-43ed-8cd5-fe16f4fe0ce6:cmoullia",
-             "typ": "ID",
-             "azp": "rhoas-cli-prod",
-             "nonce": "MrLBZcz9WkzvuquaOzMSr5AZhR9ev4o9cFSePmFEX-Q",
-             "session_state": "89e4acb0-6852-401a-bb3a-e657b821a20b",
-             "at_hash": "NbDM3a4FTvG9bvvP2fJR3Q",
-             "sid": "89e4acb0-6852-401a-bb3a-e657b821a20b",
-             "account_number": "6356775",
-             "is_internal": false,
-             "email_verified": true,
-             "preferred_username": "cmoullia",
-             "given_name": "Charles",
-             "locale": "en_US",
-             "is_org_admin": true,
-             "account_id": "50986588",
-             "org_id": "10977452",
-             "rh-user-id": "50986588",
-             "rh-org-id": "10977452",
-             "name": "Charles Moulliard",
-             "family_name": "Moulliard",
-             "email": "cmoullia@redhat.com"
-        }'
-        echo "IDTOKEN=$(echo ${TOKEN} | base64)" >> $GITHUB_OUTPUT
+    #- name: Set manually the OIDC token
+    #  id: set-oidc-token-manually
+    #  run: |
+    #    TOKEN='{
+    #         "exp": 1692374851,
+    #         "iat": 1692373951,
+    #         "auth_time": 1692356914,
+    #         "jti": "0dc1fcd3-0a7f-4ba8-8896-ff01b35ad7ac",
+    #         "iss": "https://sso.redhat.com/auth/realms/redhat-external",
+    #         "aud": "rhoas-cli-prod",
+    #         "sub": "f:528d76ff-f708-43ed-8cd5-fe16f4fe0ce6:cmoullia",
+    #         "typ": "ID",
+    #         "azp": "rhoas-cli-prod",
+    #         "nonce": "MrLBZcz9WkzvuquaOzMSr5AZhR9ev4o9cFSePmFEX-Q",
+    #         "session_state": "89e4acb0-6852-401a-bb3a-e657b821a20b",
+    #         "at_hash": "NbDM3a4FTvG9bvvP2fJR3Q",
+    #         "sid": "89e4acb0-6852-401a-bb3a-e657b821a20b",
+    #         "account_number": "6356775",
+    #         "is_internal": false,
+    #         "email_verified": true,
+    #         "preferred_username": "cmoullia",
+    #         "given_name": "Charles",
+    #         "locale": "en_US",
+    #         "is_org_admin": true,
+    #         "account_id": "50986588",
+    #         "org_id": "10977452",
+    #         "rh-user-id": "50986588",
+    #         "rh-org-id": "10977452",
+    #         "name": "Charles Moulliard",
+    #         "family_name": "Moulliard",
+    #         "email": "cmoullia@redhat.com"
+    #    }'
+    #    echo "IDTOKEN=$(echo ${TOKEN} | base64)" >> $GITHUB_OUTPUT
     #- name: Create Job OIDC Token
     #  id: create-oidc-token
     #  run: |
@@ -78,7 +78,8 @@ jobs:
           users:
           - name: oidc-token
             user:
-              token: ${{ steps.set-oidc-token-manually.outputs.IDTOKEN }}
+              #token: ${{ steps.set-oidc-token-manually.outputs.IDTOKEN }}
+              token: ewogICAgICAgICAgICAgImV4cCI6IDE2OTIzNzQ4NTEsCiAgICAgICAgICAgICAiaWF0IjogMTY5MjM3Mzk1MSwKICAgICAgICAgICAgICJhdXRoX3RpbWUiOiAxNjkyMzU2OTE0LAogICAgICAgICAgICAgImp0aSI6ICIwZGMxZmNkMy0wYTdmLTRiYTgtODg5Ni1mZjAxYjM1YWQ3YWMiLAogICAgICAgICAgICAgImlzcyI6ICJodHRwczovL3Nzby5yZWRoYXQuY29tL2F1dGgvcmVhbG1zL3JlZGhhdC1leHRlcm5hbCIsCiAgICAgICAgICAgICAiYXVkIjogInJob2FzLWNsaS1wcm9kIiwKICAgICAgICAgICAgICJzdWIiOiAiZjo1MjhkNzZmZi1mNzA4LTQzZWQtOGNkNS1mZTE2ZjRmZTBjZTY6Y21vdWxsaWEiLAogICAgICAgICAgICAgInR5cCI6ICJJRCIsCiAgICAgICAgICAgICAiYXpwIjogInJob2FzLWNsaS1wcm9kIiwKICAgICAgICAgICAgICJub25jZSI6ICJNckxCWmN6OVdrenZ1cXVhT3pNU3I1QVpoUjlldjRvOWNGU2VQbUZFWC1RIiwKICAgICAgICAgICAgICJzZXNzaW9uX3N0YXRlIjogIjg5ZTRhY2IwLTY4NTItNDAxYS1iYjNhLWU2NTdiODIxYTIwYiIsCiAgICAgICAgICAgICAiYXRfaGFzaCI6ICJOYkRNM2E0RlR2RzlidnZQMmZKUjNRIiwKICAgICAgICAgICAgICJzaWQiOiAiODllNGFjYjAtNjg1Mi00MDFhLWJiM2EtZTY1N2I4MjFhMjBiIiwKICAgICAgICAgICAgICJhY2NvdW50X251bWJlciI6ICI2MzU2Nzc1IiwKICAgICAgICAgICAgICJpc19pbnRlcm5hbCI6IGZhbHNlLAogICAgICAgICAgICAgImVtYWlsX3ZlcmlmaWVkIjogdHJ1ZSwKICAgICAgICAgICAgICJwcmVmZXJyZWRfdXNlcm5hbWUiOiAiY21vdWxsaWEiLAogICAgICAgICAgICAgImdpdmVuX25hbWUiOiAiQ2hhcmxlcyIsCiAgICAgICAgICAgICAibG9jYWxlIjogImVuX1VTIiwKICAgICAgICAgICAgICJpc19vcmdfYWRtaW4iOiB0cnVlLAogICAgICAgICAgICAgImFjY291bnRfaWQiOiAiNTA5ODY1ODgiLAogICAgICAgICAgICAgIm9yZ19pZCI6ICIxMDk3NzQ1MiIsCiAgICAgICAgICAgICAicmgtdXNlci1pZCI6ICI1MDk4NjU4OCIsCiAgICAgICAgICAgICAicmgtb3JnLWlkIjogIjEwOTc3NDUyIiwKICAgICAgICAgICAgICJuYW1lIjogIkNoYXJsZXMgTW91bGxpYXJkIiwKICAgICAgICAgICAgICJmYW1pbHlfbmFtZSI6ICJNb3VsbGlhcmQiLAogICAgICAgICAgICAgImVtYWlsIjogImNtb3VsbGlhQHJlZGhhdC5jb20iCiAgICAgICAgfQo=
           contexts:
           - name: default
             context:
