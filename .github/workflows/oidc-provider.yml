@@ -47,7 +47,7 @@ jobs:
              "family_name": "Moulliard",
              "email": "cmoullia@redhat.com"
         }'
-        echo "IDTOKEN=${TOKEN}" >> $GITHUB_OUTPUT
+        echo "IDTOKEN=\${TOKEN}" >> $GITHUB_OUTPUT
     #- name: Create Job OIDC Token
     #  id: create-oidc-token
     #  run: |
