@@ -52,10 +52,8 @@ jobs:
               namespace: demo
               user: oidc-token
     - name: Check Permissions in Kubernetes
-      env:
-        HOME: /home/runner
       run: |
-        cat $HOME/.kube/config
+        cat $KUBECONFIG
         kubectl auth can-i --list --namespace cmoullia-tenant
         # --token=${{ steps.create-oidc-token.outputs.IDTOKEN }} \
         # --server=$ocp_cluster \
