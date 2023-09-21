@@ -47,14 +47,9 @@ jobs:
           TAG_VERSION="${{ github.ref_name }}"
           export NEW_VERSION="${TAG_VERSION:1}"
           echo "New version: $NEW_VERSION"
-          
-          if ! command -v yq &> /dev/null
-          then
-            echo "yq could not be found"
-          fi
   
           yq '.appVersion = env(NEW_VERSION)' -i ./deploy/charts/godaddy-webhook/Chart.yaml
-          yq '.image.tag = env()' -i ./deploy/charts/godaddy-webhook/values.yaml
+          yq '.image.tag  = env(NEW_VERSION)' -i ./deploy/charts/godaddy-webhook/values.yaml
           
           echo "Chart updated"
           cat ./deploy/charts/godaddy-webhook/Chart.yaml
