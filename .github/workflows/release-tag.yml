@@ -42,7 +42,7 @@ jobs:
           echo "Tagger: ${{ github.event.sender.login }}"
 
       - name: Dion't tag chart and image
-        if: {{ github.event_ref != 'tag'}}
+        if: {{ github.event_ref != 'tag' }}
         run: |
           echo "This is NOT a tag commit !"
           echo "Tag Name: ${{ github.event.ref }}"
