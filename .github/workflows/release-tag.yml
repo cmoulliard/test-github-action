@@ -47,8 +47,13 @@ jobs:
           NEW_VERSION="${{ github.ref_name }}"
           echo "New version: $NEW_VERSION"
           helm show chart ./deploy/charts/godaddy-webhook > ./chart-temp.yaml
-          yq eval ".version.appVersion = \"$NEW_VERSION\"" -i ./chart-temp.yaml
-          mv ./chart-temp.yaml ./deploy/charts/godaddy-webhook/Chart.yaml
+          
+          if ! command -v yq &> /dev/null
+          then
+            echo "yq could not be found"
+          fi
+  
+          yq '.appVersion = env(NEW_VERSION)' -i ./chart-temp.yaml
           
           echo "Chart updated"
           cat ./deploy/charts/godaddy-webhook/Chart.yaml
