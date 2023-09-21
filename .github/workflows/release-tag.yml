@@ -2,20 +2,6 @@
 # https://stackoverflow.com/questions/74949299/how-to-versioning-releases-in-github-actions
 # https://stackoverflow.com/questions/66017161/add-a-tag-to-a-docker-image-if-theres-a-git-tag-using-github-action
 # To generate the docker labels/tags --> https://github.com/docker/metadata-action
-# Updating helm chart version
-# - name: Update Chart Version
-#   run: |
-#     # Replace the AppVersion in the Chart.yaml file with the release tag name
-#     NEW_VERSION="${GITHUB_REF#refs/tags/}"
-#     helm show chart ./path/to/your/helm/chart > ./chart-temp.yaml
-#     yq eval ".version.appVersion = \"$NEW_VERSION\"" -i ./chart-temp.yaml
-#     mv ./chart-temp.yaml ./path/to/your/helm/chart/Chart.yaml
-#
-#     git config user.email "github-actions@github.com"
-#     git config user.name "GitHub Actions"
-#     git add ./path/to/your/helm/chart/Chart.yaml
-#     git commit -m "Update Helm chart version to $NEW_VERSION"
-#     git push
 
 name: Tag Docker Image like the chart AppVersion
 
@@ -25,8 +11,37 @@ on:
     tags: [ v* ]
 
 jobs:
-  build:
+  test-next-release:
+    runs-on: ubuntu-latest
 
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0 # required for github-action-get-previous-tag
+
+      - name: Get previous tag
+        id: previoustag
+        uses: 'WyriHaximus/github-action-get-previous-tag@v1'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Get next minor version
+        id: semver
+        uses: 'WyriHaximus/github-action-next-semvers@v1'
+        with:
+          version: ${{ steps.previoustag.outputs.tag }}
+
+      - name: Create release
+        id: create_release_id
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ steps.semver.outputs.patch }}
+          release_name: Release ${{ steps.semver.outputs.patch }}
+
+  build:
     runs-on: ubuntu-latest
 
     steps:
