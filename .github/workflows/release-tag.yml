@@ -21,8 +21,8 @@ name: Tag Docker Image with Git
 
 on:
   workflow_dispatch:
-  #push:
-  #  tags: [ v* ]
+  push:
+    tags: [ v* ]
 
 jobs:
   build:
@@ -35,11 +35,12 @@ jobs:
 
       - name: Update Chart Version
         run: |
-          tag="${GITHUB_SHA}"
-            
-            # If release parse the tag name from GITHUB_REF
-          if [ "${GITHUB_EVENT_NAME}" == "release" ]; then
-           tag=$(echo $GITHUB_REF | sed 's/refs\/tags\///g')
+          # Check if the push event created a tag
+          if [[ "${{ github.event.ref_type }}" == "tag" ]]; then
+            echo "This is a tag commit"
+            echo "Tag Name: ${{ github.event.ref }}"
+            echo "Commit SHA: ${{ github.sha }}"
+            echo "Tagger: ${{ github.event.sender.login }}"
+          else
+            echo "This is not a tag commit"
           fi
-          
-          echo $tag
