@@ -19,10 +19,6 @@ jobs:
         if: github.ref_type == 'tag' && startsWith(github.ref_name, 'v')
         run: |
           echo "This is event referenced as : ${{ github.ref_type }}."
-          echo "Tag Name: ${{ github.ref_name }}"
+          TAG_NAME="${{ github.ref_name }}"
+          echo "Tag Name: ${TAG_NAME:1}"
           echo "Commit SHA: ${{ github.sha }}"
-
-      - name: Don't tag chart and image
-        if: ${{ github.ref_type != 'tag' }}
-        run: |
-          echo "This is event referenced as : ${{ github.ref_type }}."
