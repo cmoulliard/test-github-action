@@ -1,0 +1,45 @@
+# Github workflow
+# https://stackoverflow.com/questions/74949299/how-to-versioning-releases-in-github-actions
+# https://stackoverflow.com/questions/66017161/add-a-tag-to-a-docker-image-if-theres-a-git-tag-using-github-action
+# To generate the docker labels/tags --> https://github.com/docker/metadata-action
+# Updating helm chart version
+# - name: Update Chart Version
+#   run: |
+#     # Replace the AppVersion in the Chart.yaml file with the release tag name
+#     NEW_VERSION="${GITHUB_REF#refs/tags/}"
+#     helm show chart ./path/to/your/helm/chart > ./chart-temp.yaml
+#     yq eval ".version.appVersion = \"$NEW_VERSION\"" -i ./chart-temp.yaml
+#     mv ./chart-temp.yaml ./path/to/your/helm/chart/Chart.yaml
+#
+#     git config user.email "github-actions@github.com"
+#     git config user.name "GitHub Actions"
+#     git add ./path/to/your/helm/chart/Chart.yaml
+#     git commit -m "Update Helm chart version to $NEW_VERSION"
+#     git push
+
+name: Tag Docker Image with Git
+
+on:
+  workflow_dispatch:
+  #push:
+  #  tags: [ v* ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Update Chart Version
+        run: |
+          tag="${GITHUB_SHA}"
+            
+            # If release parse the tag name from GITHUB_REF
+          if [ "${GITHUB_EVENT_NAME}" == "release" ]; then
+           tag=$(echo $GITHUB_REF | sed 's/refs\/tags\///g')
+          fi
+          
+          echo $tag
