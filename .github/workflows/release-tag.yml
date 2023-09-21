@@ -44,20 +44,23 @@ jobs:
           echo "Tag Name: ${{ github.ref_name }}"
           echo "Commit SHA: ${{ github.sha }}"
           
-          export NEW_VERSION="${{ github.ref_name }}"
+          TAG_VERSION="${{ github.ref_name }}"
+          export NEW_VERSION="${TAG_VERSION:1}"
           echo "New version: $NEW_VERSION"
-          helm show chart ./deploy/charts/godaddy-webhook > ./chart-temp.yaml
           
           if ! command -v yq &> /dev/null
           then
             echo "yq could not be found"
           fi
   
-          yq '.appVersion = env(NEW_VERSION)' -i ./chart-temp.yaml
-          mv -f ./chart-temp.yaml ./deploy/charts/godaddy-webhook/Chart.yaml
+          yq '.appVersion = env(NEW_VERSION)' -i ./deploy/charts/godaddy-webhook/Chart.yaml
+          yq '.image.tag = env()' -i ./deploy/charts/godaddy-webhook/values.yaml
           
           echo "Chart updated"
           cat ./deploy/charts/godaddy-webhook/Chart.yaml
+          
+          echo "Values updated"
+          cat ./deploy/charts/godaddy-webhook/values.yaml
 
       - name: Don't tag chart and image
         if: ${{ github.ref_type != 'tag' }}
