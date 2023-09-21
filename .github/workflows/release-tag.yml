@@ -29,12 +29,21 @@ jobs:
 
       - name: Create release
         id: create_release_id
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: ${{ steps.next-version.outputs.version }}
-          release_name: Release ${{ steps.semver.next-version.version }}
+        run: |
+          echo ${{ steps.semver.next-version.version }}
+          echo ${{ steps.semver.next-version.v_version }}
+          echo ${{ steps.semver.next-version.major_version }}
+          echo ${{ steps.semver.next-version.minor_version }}
+          echo ${{ steps.semver.next-version.patch_version }}
+          echo ${{ steps.semver.next-version.major_v_version }}
+          echo ${{ steps.semver.next-version.minor_v_version }}
+          echo ${{ steps.semver.next-version.patch_v_version }}
+        # uses: actions/create-release@v1
+        # env:
+        #   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        # with:
+        #   tag_name: ${{ steps.next-version.outputs.version }}
+        #   release_name: Release ${{ steps.semver.next-version.version }}
 
   build:
     runs-on: ubuntu-latest
