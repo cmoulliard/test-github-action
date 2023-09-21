@@ -31,13 +31,13 @@ jobs:
         id: create_release_id
         run: |
           echo "${{ steps.next-version.outputs.version }}"
-          echo "${{ steps.next-version.v_version }}"
-          echo "${{ steps.next-version.major_version }}"
-          echo "${{ steps.next-version.minor_version }}"
-          echo "${{ steps.next-version.patch_version }}"
-          echo "${{ steps.next-version.major_v_version }}"
-          echo "${{ steps.next-version.minor_v_version }}"
-          echo "${{ steps.next-version.patch_v_version }}"
+          echo "${{ steps.next-version.outputs.v_version }}"
+          echo "${{ steps.next-version.outputs.major_version }}"
+          echo "${{ steps.next-version.outputs.minor_version }}"
+          echo "${{ steps.next-version.outputs.patch_version }}"
+          echo "${{ steps.next-version.outputs.major_v_version }}"
+          echo "${{ steps.next-version.outputs.minor_v_version }}"
+          echo "${{ steps.next-version.outputs.patch_v_version }}"
         # uses: actions/create-release@v1
         # env:
         #   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
