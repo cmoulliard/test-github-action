@@ -7,6 +7,9 @@ name: Tag Docker Image like the chart AppVersion
 
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - main
 
 jobs:
   check_commit_message:
