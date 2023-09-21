@@ -34,15 +34,15 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Tag chart and image
-        if: github.event_ref == 'tag'
+        if: github.event_ref_type == 'tag' && startsWith(github.event.ref, 'v')
         run: |
           echo "This is a tag commit !"
           echo "Tag Name: ${{ github.event.ref }}"
           echo "Commit SHA: ${{ github.sha }}"
           echo "Tagger: ${{ github.event.sender.login }}"
 
-      - name: Dion't tag chart and image
-        if: ${{ github.event_ref != 'tag' }}
+      - name: Don't tag chart and image
+        if: ${{ github.event_ref_type != 'tag' }}
         run: |
           echo "This is NOT a tag commit !"
           echo "Tag Name: ${{ github.event.ref }}"
