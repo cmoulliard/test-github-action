@@ -49,8 +49,9 @@ jobs:
           helm show chart ./deploy/charts/godaddy-webhook > ./chart-temp.yaml
           yq eval ".version.appVersion = \"$NEW_VERSION\"" -i ./chart-temp.yaml
           mv ./chart-temp.yaml ./deploy/charts/godaddy-webhook/Chart.yaml
-          cat ./deploy/charts/godaddy-webhook/Chart.yaml
           
+          echo "Chart updated"
+          cat ./deploy/charts/godaddy-webhook/Chart.yaml
 
       - name: Don't tag chart and image
         if: ${{ github.ref_type != 'tag' }}
