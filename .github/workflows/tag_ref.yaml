@@ -1,0 +1,28 @@
+name: Tag reference
+
+on:
+  workflow_dispatch:
+  push:
+    tags: [ v* ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+
+      - name: Tag chart and image
+        if: github.ref_type == 'tag' && startsWith(github.ref_name, 'v')
+        run: |
+          echo "This is event referenced as : ${{ github.ref_type }}."
+          echo "Tag Name: ${{ github.ref_name }}"
+          echo "Commit SHA: ${{ github.sha }}"
+
+      - name: Don't tag chart and image
+        if: ${{ github.ref_type != 'tag' }}
+        run: |
+          echo "This is event referenced as : ${{ github.ref_type }}."
