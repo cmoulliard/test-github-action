@@ -2,6 +2,10 @@ name: Tag reference
 
 on:
   workflow_dispatch:
+    inputs:
+      version:
+        description: 'The version you want to release.'
+        required: true
   push:
     tags: [ v* ]
 
