@@ -37,7 +37,7 @@ jobs:
         if: github.ref_type == 'tag' && startsWith(github.event.ref, 'v')
         run: |
           echo "This is a tag commit !"
-          echo "Git event ref_type: ${{ github.event_ref_type }}"
+          echo "Git event ref_type: ${{ github.ref_type }}"
           echo "Tag Name: ${{ github.event.ref }}"
           echo "Commit SHA: ${{ github.sha }}"
           echo "Tagger: ${{ github.event.sender.login }}"
@@ -46,7 +46,7 @@ jobs:
         if: ${{ github.ref_type != 'tag' }}
         run: |
           echo "This is NOT a tag commit !"
-          echo "Git event ref_type: ${{ github.event_ref_type }}"
+          echo "Git event ref_type: ${{ github.ref_type }}"
           echo "Tag Name: ${{ github.event.ref }}"
           echo "Commit SHA: ${{ github.sha }}"
           echo "Tagger: ${{ github.event.sender.login }}"
