@@ -30,7 +30,7 @@ jobs:
       - name: Create release
         id: create_release_id
         run: |
-          echo "${{ steps.next-version.version }}"
+          echo "${{ steps.next-version.outputs.version }}"
           echo "${{ steps.next-version.v_version }}"
           echo "${{ steps.next-version.major_version }}"
           echo "${{ steps.next-version.minor_version }}"
