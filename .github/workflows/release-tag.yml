@@ -54,7 +54,7 @@ jobs:
           fi
   
           yq '.appVersion = env(NEW_VERSION)' -i ./chart-temp.yaml
-          mv -i ./chart-temp.yaml ./deploy/charts/godaddy-webhook/Chart.yaml
+          mv -f ./chart-temp.yaml ./deploy/charts/godaddy-webhook/Chart.yaml
           
           echo "Chart updated"
           cat ./deploy/charts/godaddy-webhook/Chart.yaml
