@@ -33,14 +33,18 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Update Chart Version
+      - name: Tag chart and image
+        if: github.event_ref == 'tag'
         run: |
-          # Check if the push event created a tag
-          if [[ "${{ github.event.ref_type }}" == "tag" ]]; then
-            echo "This is a tag commit"
-            echo "Tag Name: ${{ github.event.ref }}"
-            echo "Commit SHA: ${{ github.sha }}"
-            echo "Tagger: ${{ github.event.sender.login }}"
-          else
-            echo "This is not a tag commit"
-          fi
+          echo "This is a tag commit !"
+          echo "Tag Name: ${{ github.event.ref }}"
+          echo "Commit SHA: ${{ github.sha }}"
+          echo "Tagger: ${{ github.event.sender.login }}"
+
+      - name: Dion't tag chart and image
+        if: {{ github.event_ref != 'tag'}}
+        run: |
+          echo "This is NOT a tag commit !"
+          echo "Tag Name: ${{ github.event.ref }}"
+          echo "Commit SHA: ${{ github.sha }}"
+          echo "Tagger: ${{ github.event.sender.login }}"
