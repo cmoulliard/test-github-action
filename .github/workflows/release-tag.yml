@@ -44,7 +44,7 @@ jobs:
           echo "Tag Name: ${{ github.ref_name }}"
           echo "Commit SHA: ${{ github.sha }}"
           
-          NEW_VERSION="${{ github.ref_name }}"
+          export NEW_VERSION="${{ github.ref_name }}"
           echo "New version: $NEW_VERSION"
           helm show chart ./deploy/charts/godaddy-webhook > ./chart-temp.yaml
           
