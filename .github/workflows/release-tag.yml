@@ -7,18 +7,36 @@ name: Tag Docker Image like the chart AppVersion
 
 on:
   workflow_dispatch:
-  push:
-    tags: [ v* ]
 
 jobs:
-  test-next-release:
+  check_commit_message:
     runs-on: ubuntu-latest
 
+    steps:
+      - name: Check Commit Message
+        id: check_message
+        run: |
+          # Check if the commit message contains the specific word "your_word"
+          if [[ "${{ github.event.head_commit.message }}" == *[to_release]* ]]; then
+            echo "Commit message contains '[to_release]'"
+            echo "TO_RELEASE=true" >> "${GITHUB_OUTPUT}"
+          else
+            echo "Commit message does not contain '[to_release]'"
+            echo "TO_RELEASE=false" >> "${GITHUB_OUTPUT}"
+          fi
+
+  test-next-release:
+    runs-on: ubuntu-latest
+    needs: check_commit_message
+    if: ${{ needs.check_commit_message.outputs.to_release == 'true' }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
         with:
+          repository: snowdrop/godaddy-webhook
           fetch-depth: 0 # required for github-action-get-previous-tag
+
+      - uses: azure/setup-helm@v3
 
       - # This action get the latest tag version and increment it
         # using semver as documented: https://github.com/reecetech/version-increment/tree/main
@@ -28,6 +46,21 @@ jobs:
         with:
           scheme: semver
           increment: minor
+
+      - name: Tag chart and image
+        #if: github.ref_type == 'tag' && startsWith(github.ref_name, 'v')
+        run: |
+          export NEW_VERSION="${{ steps.next-version.outputs.version }}"
+          echo "New version: $NEW_VERSION"
+
+          yq '.appVersion = env(NEW_VERSION)' -i ./deploy/charts/godaddy-webhook/Chart.yaml
+          yq '.image.tag  = env(NEW_VERSION)' -i ./deploy/charts/godaddy-webhook/values.yaml
+
+          echo "Chart updated"
+          cat ./deploy/charts/godaddy-webhook/Chart.yaml
+
+          echo "Values updated"
+          cat ./deploy/charts/godaddy-webhook/values.yaml  
 
       - name: Create release
         id: create_release_id
@@ -46,40 +79,3 @@ jobs:
         with:
           tag_name: ${{ steps.next-version.outputs.version }}
           release_name: Release ${{ steps.next-version.outputs.version }}
-
-  build:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-        with:
-          repository: snowdrop/godaddy-webhook
-
-      - uses: azure/setup-helm@v3
-
-      - name: Tag chart and image
-        #if: github.ref_type == 'tag' && startsWith(github.ref_name, 'v')
-        run: |
-          echo "This is event referenced as : ${{ github.ref_type }}."
-          echo "Tag Name: ${{ github.ref_name }}"
-          echo "Commit SHA: ${{ github.sha }}"
-          
-          TAG_VERSION="${{ github.ref_name }}"
-          export NEW_VERSION="${TAG_VERSION:1}"
-          echo "New version: $NEW_VERSION"
-  
-          yq '.appVersion = env(NEW_VERSION)' -i ./deploy/charts/godaddy-webhook/Chart.yaml
-          yq '.image.tag  = env(NEW_VERSION)' -i ./deploy/charts/godaddy-webhook/values.yaml
-          
-          echo "Chart updated"
-          cat ./deploy/charts/godaddy-webhook/Chart.yaml
-          
-          echo "Values updated"
-          cat ./deploy/charts/godaddy-webhook/values.yaml
-
-      - name: Don't tag chart and image
-        if: ${{ github.ref_type != 'tag' }}
-        run: |
-          echo "This is event referenced as : ${{ github.ref_type }}."
-          echo "Commit SHA: ${{ github.sha }}"
