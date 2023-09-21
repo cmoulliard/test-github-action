@@ -20,7 +20,9 @@ jobs:
         with:
           fetch-depth: 0 # required for github-action-get-previous-tag
 
-      - name: Get next version
+      - # This action get the latest tag version and increment it
+        # using semver as documented: https://github.com/reecetech/version-increment/tree/main
+        name: Get next version
         uses: reecetech/version-increment@2023.9.3
         id: next-version
         with:
@@ -29,21 +31,21 @@ jobs:
 
       - name: Create release
         id: create_release_id
-        run: |
-          echo "${{ steps.next-version.outputs.version }}"
-          echo "${{ steps.next-version.outputs.v_version }}"
-          echo "${{ steps.next-version.outputs.major_version }}"
-          echo "${{ steps.next-version.outputs.minor_version }}"
-          echo "${{ steps.next-version.outputs.patch_version }}"
-          echo "${{ steps.next-version.outputs.major_v_version }}"
-          echo "${{ steps.next-version.outputs.minor_v_version }}"
-          echo "${{ steps.next-version.outputs.patch_v_version }}"
-        # uses: actions/create-release@v1
-        # env:
-        #   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        # with:
-        #   tag_name: ${{ steps.next-version.outputs.version }}
-        #   release_name: Release ${{ steps.next-version.outputs.version }}
+        #run: |
+        #  echo "${{ steps.next-version.outputs.version }}"
+        #  echo "${{ steps.next-version.outputs.v_version }}"
+        #  echo "${{ steps.next-version.outputs.major_version }}"
+        #  echo "${{ steps.next-version.outputs.minor_version }}"
+        #  echo "${{ steps.next-version.outputs.patch_version }}"
+        #  echo "${{ steps.next-version.outputs.major_v_version }}"
+        #  echo "${{ steps.next-version.outputs.minor_v_version }}"
+        #  echo "${{ steps.next-version.outputs.patch_v_version }}"
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ steps.next-version.outputs.version }}
+          release_name: Release ${{ steps.next-version.outputs.version }}
 
   build:
     runs-on: ubuntu-latest
@@ -57,7 +59,7 @@ jobs:
       - uses: azure/setup-helm@v3
 
       - name: Tag chart and image
-        if: github.ref_type == 'tag' && startsWith(github.ref_name, 'v')
+        #if: github.ref_type == 'tag' && startsWith(github.ref_name, 'v')
         run: |
           echo "This is event referenced as : ${{ github.ref_type }}."
           echo "Tag Name: ${{ github.ref_name }}"
