@@ -91,23 +91,30 @@ jobs:
            
            kubectl wait --for=condition=Ready vm/fedora38 --timeout=10m
            
-           kubectl get vmi -n kubevirt
-           kubectl get vmi -n kubevirt -o jsonpath='{.items[0].status.interfaces[0].ipAddress}'
+           kubectl get vmi
+           kubectl get vmi -o jsonpath='{.items[0].status.interfaces[0].ipAddress}'
            
        - name: (Only if it failed) Log messages
          if: failure()
          run: |
+           echo "########### Describe VM ################"
            echo "Describe virtualmachine/fedora38"
            kubectl describe virtualmachine/fedora38
            
-           echo "###################################"
+           echo "########### VM status ################"
            kubectl get virtualmachine/fedora38 -oyaml
            
-           echo "###################################"
+           echo "########### VMI status ################"
+           kubectl get vmi -A -oyaml
+           
+           echo "########### VM POD ################"
            kubectl get pod -lvm.kubevirt.io/name=fedora38 -oyaml
            
-           echo "###################################"
+           echo "########### All PODs ################"
+           kubectl get pod -A
+           
+           echo "######### PVC ################"
            kubectl get pvc -A
            
-           echo "###################################"
+           echo "########### SC ####################"
            kubectl get sc -A -oyaml
