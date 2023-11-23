@@ -101,3 +101,9 @@ jobs:
            
            echo "###################################"
            kubectl get pod -lvm.kubevirt.io/name=fedora38 -oyaml
+           
+           echo "###################################"
+           kubectl get pvc -A
+           
+           echo "###################################"
+           kubectl get sc -A -oyaml
