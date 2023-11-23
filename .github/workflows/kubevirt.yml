@@ -52,9 +52,6 @@ jobs:
            kubectl apply -f "https://github.com/kubevirt/containerized-data-importer/releases/download/${KUBEVIRT_CDI_VERSION}/cdi-operator.yaml"
            kubectl apply -f "https://github.com/kubevirt/containerized-data-importer/releases/download/${KUBEVIRT_CDI_VERSION}/cdi-cr.yaml"
            
-           sleep 2m
-           kubectl get pods
-           
            echo "Waiting for KubeVirt to be ready"
            kubectl wait --for=condition=Available kubevirt kubevirt --namespace=kubevirt --timeout=5m
          
@@ -65,7 +62,12 @@ jobs:
          run: |
            echo "Creating a VM"
            kubectl apply -f .github/resources/vm-fedora38.yml
+          
+           sleep 2m
+           kubectl get pods
+           
            kubectl wait --for=condition=Ready vm/fedora38 --timeout=5m
+           
            kubectl get vmi -n kubevirt
            kubectl get vmi -n kubevirt -o jsonpath='{.items[0].status.interfaces[0].ipAddress}'
            
