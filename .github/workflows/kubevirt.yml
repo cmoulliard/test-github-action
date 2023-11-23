@@ -41,6 +41,14 @@ jobs:
            KUBEVIRT_COMMON_INSTANCETYPES_VERSION: v0.3.2
            KUBEVIRT_USE_EMULATION: "true"
          run: |
+           function mount_disk() {
+               local node=$1
+               local idx=$2
+               $DOCKER exec $node bash -c "mkdir -p /var/local/kubevirt-storage/local-volume/disk${idx}"
+               $DOCKER exec $node bash -c "mkdir -p /mnt/local-storage/local/disk${idx}"
+               $DOCKER exec $node bash -c "mount -o bind /var/local/kubevirt-storage/local-volume/disk${idx} /mnt/local-storage/local/disk${idx}"
+           }
+
            echo "Deploying KubeVirt"
            kubectl apply -f "https://github.com/kubevirt/kubevirt/releases/download/${KUBEVIRT_VERSION}/kubevirt-operator.yaml"
            kubectl apply -f "https://github.com/kubevirt/kubevirt/releases/download/${KUBEVIRT_VERSION}/kubevirt-cr.yaml"
@@ -57,6 +65,22 @@ jobs:
          
            echo "Successfully deployed KubeVirt:"
            kubectl get pods -n kubevirt
+           
+           echo "# Create the `local` storage class"
+           NODE_NAME=$(kubectl get nodes -o=jsonpath='{.items[0].metadata.name}')
+           echo "Node name is: $NODE_NAME"
+                
+           # Create local-volume directories, which, on other providers, are pre-provisioned.
+           # For more info, check https://github.com/kubevirt/kubevirtci/blob/master/cluster-provision/STORAGE.md
+           for i in {1..10}; do
+             mount_disk $node $i
+           done
+           docker exec $NODE_NAME bash -c "chmod -R 777 /var/local/kubevirt-storage/local-volume"
+           
+           echo "# Create the `local` storage class
+           kubectl apply -f .github/resources/local-volume.yaml
+           
+           
 
        - name: Creating a VM
          run: |
