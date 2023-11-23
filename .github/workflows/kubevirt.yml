@@ -42,11 +42,11 @@ jobs:
            KUBEVIRT_USE_EMULATION: "true"
          run: |
            function mount_disk() {
-               local node=$1
-               local idx=$2
-               $DOCKER exec $node bash -c "mkdir -p /var/local/kubevirt-storage/local-volume/disk${idx}"
-               $DOCKER exec $node bash -c "mkdir -p /mnt/local-storage/local/disk${idx}"
-               $DOCKER exec $node bash -c "mount -o bind /var/local/kubevirt-storage/local-volume/disk${idx} /mnt/local-storage/local/disk${idx}"
+             node=$1
+             idx=$2
+             docker exec $node bash -c "mkdir -p /var/local/kubevirt-storage/local-volume/disk${idx}"
+             docker exec $node bash -c "mkdir -p /mnt/local-storage/local/disk${idx}"
+             docker exec $node bash -c "mount -o bind /var/local/kubevirt-storage/local-volume/disk${idx} /mnt/local-storage/local/disk${idx}"
            }
 
            echo "Deploying KubeVirt"
