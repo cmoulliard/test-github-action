@@ -52,12 +52,14 @@ jobs:
            kubectl apply -f "https://github.com/kubevirt/containerized-data-importer/releases/download/${KUBEVIRT_CDI_VERSION}/cdi-operator.yaml"
            kubectl apply -f "https://github.com/kubevirt/containerized-data-importer/releases/download/${KUBEVIRT_CDI_VERSION}/cdi-cr.yaml"
            
+           sleep 2m
+           kubectl get pods
+           
            echo "Waiting for KubeVirt to be ready"
            kubectl wait --for=condition=Available kubevirt kubevirt --namespace=kubevirt --timeout=5m
          
            echo "Successfully deployed KubeVirt:"
            kubectl get pods -n kubevirt
-          
 
        - name: Creating a VM
          run: |
