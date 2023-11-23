@@ -82,7 +82,7 @@ jobs:
 
        - name: Creating a VM
          run: |
-           echo "## Creating the kubernetes secret storing the public key
+           echo "## Creating the kubernetes secret storing the public key"
            ssh-keygen -N "" -f -f id_rsa
            kubectl create secret generic fedora-ssh-key -n default --from-file=key=id_rsa.pub
            
