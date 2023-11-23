@@ -78,7 +78,7 @@ jobs:
            done
            docker exec $NODE_NAME bash -c "chmod -R 777 /var/local/kubevirt-storage/local-volume"
            
-           echo "# Create the `local` storage class
+           echo "# Create the local storage class"
            kubectl apply -f .github/resources/local-volume.yaml
 
        - name: Creating a VM
