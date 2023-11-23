@@ -82,7 +82,11 @@ jobs:
 
        - name: Creating a VM
          run: |
-           echo "### Creating a VM"
+           echo "## Creating the kubernetes secret storing the public key
+           ssh-keygen -N "" -f -f id_rsa
+           kubectl create secret generic fedora-ssh-key -n default --from-file=key=id_rsa.pub
+           
+           echo "## Creating a VM"
            kubectl apply -f .github/resources/vm-fedora38.yml
            
            kubectl wait --for=condition=Ready vm/fedora38 --timeout=10m
