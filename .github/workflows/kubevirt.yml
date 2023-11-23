@@ -7,6 +7,9 @@ jobs:
   kubevirt:
     runs-on: ubuntu-latest
     steps:
+       - name: Checkout
+         uses: actions/checkout@v3
+
        - name: Setup kind cluster
          env:
            REGISTRY_NAME: kind-registry
@@ -50,3 +53,12 @@ jobs:
          
            echo "Successfully deployed KubeVirt:"
            kubectl get pods -n kubevirt
+
+       - name: Creating a VM
+         run: |
+           echo "Creating a VM"
+           kubectl apply -f ./resources/vm-fedora38.yml
+           kubectl wait --for=condition=Ready vm/fedora38 --timeout=5m
+           kubectl get vmi -n kubevirt
+           kubectl get vmi -n kubevirt -o jsonpath='{.items[0].status.interfaces[0].ipAddress}'
+           
