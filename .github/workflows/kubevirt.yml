@@ -97,6 +97,9 @@ jobs:
        - name: (Only if it failed) Log messages
          if: failure()
          run: |
+           echo "########### Virt Handler log ################"
+           kubectl logs -lkubevirt.io=virt-handler
+           
            echo "########### Describe VM ################"
            echo "Describe virtualmachine/fedora38"
            kubectl describe virtualmachine/fedora38
