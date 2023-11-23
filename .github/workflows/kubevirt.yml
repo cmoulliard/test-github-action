@@ -3,12 +3,6 @@ name: Run kubevirt on kind
 on:
   workflow_dispatch:
 
-env:
-  KUBEVIRT_VERSION: v1.0.0
-  KUBEVIRT_CDI_VERSION: v1.57.0
-  KUBEVIRT_COMMON_INSTANCETYPES_VERSION: v0.3.2
-  KUBEVIRT_USE_EMULATION: "true"
-
 jobs:
   kubevirt:
     runs-on: ubuntu-latest
@@ -34,5 +28,25 @@ jobs:
            echo "Installing kubectl"
            curl -LO "https://dl.k8s.io/release/$KUBECTL_VERSION/bin/linux/amd64/kubectl"
 
-           echo "Successfully installed kubectl at ${KUBECTL}:"
+           echo "Successfully installed kubectl at kubectl:"
            kubectl version --client
+       
+       - name: Deploy kubevirt
+         env:
+           KUBEVIRT_VERSION: v1.0.0
+           KUBEVIRT_CDI_VERSION: v1.57.0
+           KUBEVIRT_COMMON_INSTANCETYPES_VERSION: v0.3.2
+           KUBEVIRT_USE_EMULATION: "true"
+         run: |
+           echo "Deploying KubeVirt"
+           kubectl apply -f "https://github.com/kubevirt/kubevirt/releases/download/${KUBEVIRT_VERSION}/kubevirt-operator.yaml"
+           kubectl apply -f "https://github.com/kubevirt/kubevirt/releases/download/${KUBEVIRT_VERSION}/kubevirt-cr.yaml"
+         
+           echo "Configuring Kubevirt to use emulation"
+           kubectl patch kubevirt kubevirt --namespace kubevirt --type=merge --patch '{"spec":{"configuration":{"developerConfiguration":{"useEmulation":true}}}}'
+         
+           echo "Waiting for KubeVirt to be ready"
+           kubectl wait --for=condition=Available kubevirt kubevirt --namespace=kubevirt --timeout=5m
+         
+           echo "Successfully deployed KubeVirt:"
+           kubectl get pods -n kubevirt
