@@ -32,7 +32,7 @@ jobs:
            KUBECTL_VERSION: v1.28.1
          run: |
            echo "Installing kubectl"
-           curl -LO "https://dl.k8s.io/release/$KUBECTL_VERSION/bin/linux/amd64/kubectl
+           curl -LO "https://dl.k8s.io/release/$KUBECTL_VERSION/bin/linux/amd64/kubectl"
 
            echo "Successfully installed kubectl at ${KUBECTL}:"
            kubectl version --client
