@@ -33,7 +33,10 @@ jobs:
 
            echo "Successfully installed kubectl at kubectl:"
            kubectl version --client
-       
+           
+           echo "Docker version:"
+           docker -v
+
        - name: Deploy kubevirt
          env:
            KUBEVIRT_VERSION: v1.0.0
