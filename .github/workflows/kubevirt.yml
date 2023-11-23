@@ -64,13 +64,32 @@ jobs:
              docker exec $node bash -c "mkdir -p /mnt/local-storage/local/disk${idx}"
              docker exec $node bash -c "mount -o bind /var/local/kubevirt-storage/local-volume/disk${idx} /mnt/local-storage/local/disk${idx}"
            }
-
+           
+           function is_nested_virt_enabled() {
+             kvm_nested="unknown"
+             if [ -f "/sys/module/kvm_intel/parameters/nested" ]; then
+               kvm_nested=$( cat /sys/module/kvm_intel/parameters/nested )
+             elif [ -f "/sys/module/kvm_amd/parameters/nested" ]; then
+               kvm_nested=$( cat /sys/module/kvm_amd/parameters/nested )
+             fi
+             [ "$kvm_nested" == "1" ] || [ "$kvm_nested" == "Y" ] || [ "$kvm_nested" == "y" ]
+           }
+           
+           NODE_NAME=$(kubectl get nodes -o=jsonpath='{.items[0].metadata.name}')
+           echo "Node name is: $NODE_NAME"
+           
+           docker exec -t $NODE_NAME bash -c "echo 'fs.inotify.max_user_watches=1048576' >> /etc/sysctl.conf"
+           docker exec -t $NODE_NAME bash -c "echo 'fs.inotify.max_user_instances=512' >> /etc/sysctl.conf"
+           docker exec -i $NODE_NAME bash -c "sysctl -p /etc/sysctl.conf"
+  
            echo "Deploying KubeVirt"
            kubectl apply -f "https://github.com/kubevirt/kubevirt/releases/download/${KUBEVIRT_VERSION}/kubevirt-operator.yaml"
            kubectl apply -f "https://github.com/kubevirt/kubevirt/releases/download/${KUBEVIRT_VERSION}/kubevirt-cr.yaml"
          
            echo "Configuring Kubevirt to use emulation"
-           kubectl patch kubevirt kubevirt --namespace kubevirt --type=merge --patch '{"spec":{"configuration":{"developerConfiguration":{"useEmulation":true}}}}'
+           if ! is_nested_virt_enabled; then
+             kubectl -n kubevirt patch kubevirt kubevirt --type=merge --patch '{"spec":{"configuration":{"developerConfiguration":{"useEmulation":true}}}}'
+           fi
            
            echo "Deploying KubeVirt containerized-data-importer"
            kubectl apply -f "https://github.com/kubevirt/containerized-data-importer/releases/download/${KUBEVIRT_CDI_VERSION}/cdi-operator.yaml"
@@ -82,9 +101,6 @@ jobs:
            echo "Successfully deployed KubeVirt, CDI:"
            kubectl get pods -n kubevirt
            kubectl get pods -n cdi
-           
-           NODE_NAME=$(kubectl get nodes -o=jsonpath='{.items[0].metadata.name}')
-           echo "Node name is: $NODE_NAME"
                 
            # Create local-volume directories, which, on other providers, are pre-provisioned.
            # For more info, check https://github.com/kubevirt/kubevirtci/blob/master/cluster-provision/STORAGE.md
