@@ -121,10 +121,14 @@ jobs:
            echo "## Creating a VM"
            kubectl apply -f .github/resources/vm-fedora38.yml
            
-           kubectl wait --for=condition=Ready vm/fedora38 --timeout=10m
+           sleep 5m
+           kubectl get po -A
+           kubectl get vmi -A
            
-           kubectl get vmi
-           kubectl get vmi -o jsonpath='{.items[0].status.interfaces[0].ipAddress}'
+           #kubectl wait --for=condition=Ready vm/fedora38 --timeout=10m
+           
+           #kubectl get vmi
+           #kubectl get vmi -o jsonpath='{.items[0].status.interfaces[0].ipAddress}'
            
        - name: (Only if it failed) Log messages
          if: failure()
