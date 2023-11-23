@@ -63,24 +63,23 @@ jobs:
            echo "Waiting for KubeVirt to be ready"
            kubectl wait --for=condition=Available kubevirt kubevirt --namespace=kubevirt --timeout=5m
          
-           echo "Successfully deployed KubeVirt:"
+           echo "Successfully deployed KubeVirt, CDI:"
            kubectl get pods -n kubevirt
+           kubectl get pods -n cdi
            
-           echo "# Create the `local` storage class"
+           echo "# Create the local storage class"
            NODE_NAME=$(kubectl get nodes -o=jsonpath='{.items[0].metadata.name}')
            echo "Node name is: $NODE_NAME"
                 
            # Create local-volume directories, which, on other providers, are pre-provisioned.
            # For more info, check https://github.com/kubevirt/kubevirtci/blob/master/cluster-provision/STORAGE.md
            for i in {1..10}; do
-             mount_disk $node $i
+             mount_disk $NODE_NAME $i
            done
            docker exec $NODE_NAME bash -c "chmod -R 777 /var/local/kubevirt-storage/local-volume"
            
            echo "# Create the `local` storage class
            kubectl apply -f .github/resources/local-volume.yaml
-           
-           
 
        - name: Creating a VM
          run: |
