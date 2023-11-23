@@ -57,7 +57,7 @@ jobs:
        - name: Creating a VM
          run: |
            echo "Creating a VM"
-           kubectl apply -f ./resources/vm-fedora38.yml
+           kubectl apply -f .github/resources/vm-fedora38.yml
            kubectl wait --for=condition=Ready vm/fedora38 --timeout=5m
            kubectl get vmi -n kubevirt
            kubectl get vmi -n kubevirt -o jsonpath='{.items[0].status.interfaces[0].ipAddress}'
