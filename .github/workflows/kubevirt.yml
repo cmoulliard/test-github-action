@@ -122,13 +122,14 @@ jobs:
            kubectl apply -f .github/resources/vm-fedora38.yml
            
            sleep 5m
-           kubectl get po -A
-           kubectl get vmi -A
+
+           # No VMI found = pod
+           #kubectl get vmi -A
            
-           #kubectl wait --for=condition=Ready vm/fedora38 --timeout=10m
+           kubectl wait --for=condition=Ready vm/fedora38 --timeout=5m
            
-           #kubectl get vmi
-           #kubectl get vmi -o jsonpath='{.items[0].status.interfaces[0].ipAddress}'
+           kubectl get vmi
+           kubectl get vmi -o jsonpath='{.items[0].status.interfaces[0].ipAddress}'
            
        - name: (Only if it failed) Log messages
          if: failure()
