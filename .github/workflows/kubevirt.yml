@@ -98,7 +98,7 @@ jobs:
          if: failure()
          run: |
            echo "########### Virt Handler log ################"
-           kubectl logs -lkubevirt.io=virt-handler
+           kubectl logs -lkubevirt.io=virt-handler -n kubevirt
            
            echo "########### Describe VM ################"
            echo "Describe virtualmachine/fedora38"
