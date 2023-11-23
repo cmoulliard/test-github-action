@@ -42,7 +42,6 @@ jobs:
            echo "OS:"
            cat /etc/os-release
            
-           echo "Docker version:"
            docker -v
            
            echo "kubectl version:"
@@ -55,9 +54,8 @@ jobs:
 
        - name: Install qemu
          run: |
-           sudo apt install qemu qemu-kvm virt-manager bridge-utils
-           sudo useradd -g $USER libvirt
-           sudo useradd -g $USER libvirt-kvm
+           sudo apt-get update && sudo apt-get upgrade
+           sudo apt install qemu-kvm bridge-utils
            sudo systemctl enable libvirtd.service && sudo systemctl start libvirtd.service
 
        - name: Deploy kubevirt
