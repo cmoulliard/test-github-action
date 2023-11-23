@@ -47,16 +47,17 @@ jobs:
          
            echo "Configuring Kubevirt to use emulation"
            kubectl patch kubevirt kubevirt --namespace kubevirt --type=merge --patch '{"spec":{"configuration":{"developerConfiguration":{"useEmulation":true}}}}'
-         
+           
+           echo "Deploying KubeVirt containerized-data-importer"
+           kubectl apply -f "https://github.com/kubevirt/containerized-data-importer/releases/download/${KUBEVIRT_CDI_VERSION}/cdi-operator.yaml"
+           kubectl apply -f "https://github.com/kubevirt/containerized-data-importer/releases/download/${KUBEVIRT_CDI_VERSION}/cdi-cr.yaml"
+           
            echo "Waiting for KubeVirt to be ready"
            kubectl wait --for=condition=Available kubevirt kubevirt --namespace=kubevirt --timeout=5m
          
            echo "Successfully deployed KubeVirt:"
            kubectl get pods -n kubevirt
-           
-           echo "Deploying KubeVirt containerized-data-importer"
-           kubectl apply -f "https://github.com/kubevirt/containerized-data-importer/releases/download/${KUBEVIRT_CDI_VERSION}/cdi-operator.yaml"
-           kubectl apply -f "https://github.com/kubevirt/containerized-data-importer/releases/download/${KUBEVIRT_CDI_VERSION}/cdi-cr.yaml"
+          
 
        - name: Creating a VM
          run: |
