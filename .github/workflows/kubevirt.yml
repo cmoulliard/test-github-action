@@ -67,7 +67,6 @@ jobs:
            kubectl get pods -n kubevirt
            kubectl get pods -n cdi
            
-           echo "# Create the local storage class"
            NODE_NAME=$(kubectl get nodes -o=jsonpath='{.items[0].metadata.name}')
            echo "Node name is: $NODE_NAME"
                 
@@ -85,19 +84,20 @@ jobs:
          run: |
            echo "### Creating a VM"
            kubectl apply -f .github/resources/vm-fedora38.yml
-          
-           sleep 2m
-           echo "Describe virtualmachine/fedora38"
-           kubectl describe virtualmachine/fedora38
            
-           # echo "## Get VM YAML"
-           # kubectl get virtualmachine/fedora38 -oyaml
-           
-           echo "## Get virt-launch pod ... if there"
-           kubectl get pod -lvm.kubevirt.io/name=fedora38 -oyaml
-           
-           kubectl wait --for=condition=Ready vm/fedora38 --timeout=5m
+           kubectl wait --for=condition=Ready vm/fedora38 --timeout=10m
            
            kubectl get vmi -n kubevirt
            kubectl get vmi -n kubevirt -o jsonpath='{.items[0].status.interfaces[0].ipAddress}'
            
+       - name: (Only if it failed) Log messages
+         if: failure()
+         run: |
+           echo "Describe virtualmachine/fedora38"
+           kubectl describe virtualmachine/fedora38
+           
+           echo "###################################"
+           kubectl get virtualmachine/fedora38 -oyaml
+           
+           echo "###################################"
+           kubectl get pod -lvm.kubevirt.io/name=fedora38 -oyaml
