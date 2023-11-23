@@ -3,6 +3,12 @@ name: Run kubevirt on kind
 on:
   workflow_dispatch:
 
+env:
+  KUBEVIRT_VERSION: v1.0.0
+  KUBEVIRT_CDI_VERSION: v1.57.0
+  KUBEVIRT_COMMON_INSTANCETYPES_VERSION: v0.3.2
+  KUBEVIRT_USE_EMULATION: "true"
+
 jobs:
   kubevirt:
     runs-on: ubuntu-latest
@@ -31,18 +37,30 @@ jobs:
            echo "Installing kubectl"
            curl -LO "https://dl.k8s.io/release/$KUBECTL_VERSION/bin/linux/amd64/kubectl"
 
-           echo "Successfully installed kubectl at kubectl:"
-           kubectl version --client
+       - name: Log versions
+         run: |
+           echo "OS:"
+           cat /etc/os-release
            
            echo "Docker version:"
            docker -v
+           
+           echo "kubectl version:"
+           kubectl version --client
+           
+           echo "Kubevirt version: $KUBEVIRT_VERSION"
+           
+           echo "Virtualization:"
+           LC_ALL=C lscpu | grep Virtualization
+
+       - name: Install qemu
+         run: |
+           sudo apt install qemu qemu-kvm virt-manager bridge-utils
+           sudo useradd -g $USER libvirt
+           sudo useradd -g $USER libvirt-kvm
+           sudo systemctl enable libvirtd.service && sudo systemctl start libvirtd.service
 
        - name: Deploy kubevirt
-         env:
-           KUBEVIRT_VERSION: v1.0.0
-           KUBEVIRT_CDI_VERSION: v1.57.0
-           KUBEVIRT_COMMON_INSTANCETYPES_VERSION: v0.3.2
-           KUBEVIRT_USE_EMULATION: "true"
          run: |
            function mount_disk() {
              node=$1
