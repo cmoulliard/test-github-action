@@ -60,18 +60,19 @@ jobs:
 
        - name: Creating a VM
          run: |
-           echo "Creating a VM"
+           echo "### Creating a VM"
            kubectl apply -f .github/resources/vm-fedora38.yml
           
            sleep 2m
            echo "Describe virtualmachine/fedora38"
            kubectl describe virtualmachine/fedora38
            
-           echo "Get VM YAML"
+           echo "### Get VM YAML"
            kubectl get virtualmachine/fedora38 -oyaml
            
-           echo "Get all Pods"
+           echo "### Get all Pods"
            kubectl get pods -A
+           kubectl get sc -oyaml
            
            kubectl wait --for=condition=Ready vm/fedora38 --timeout=5m
            
