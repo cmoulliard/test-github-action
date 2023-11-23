@@ -64,6 +64,8 @@ jobs:
            kubectl apply -f .github/resources/vm-fedora38.yml
           
            sleep 2m
+           kubectl describe virtualmachine/fedora38
+           kubectl get virtualmachine/fedora38 -oyaml
            kubectl get pods
            
            kubectl wait --for=condition=Ready vm/fedora38 --timeout=5m
