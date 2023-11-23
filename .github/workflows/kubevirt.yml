@@ -1,0 +1,38 @@
+name: Run kubevirt on kind
+
+on:
+  workflow_dispatch:
+
+env:
+  KUBEVIRT_VERSION=v1.0.0
+  KUBEVIRT_CDI_VERSION=v1.57.0
+  KUBEVIRT_COMMON_INSTANCETYPES_VERSION=v0.3.2
+  KUBEVIRT_USE_EMULATION="true"
+
+jobs:
+  kubevirt:
+    runs-on: ubuntu-latest
+    steps:
+       - name: Setup kind cluster
+         env:
+           REGISTRY_NAME: kind-registry
+           REGISTRY_PORT: 5000
+         run: |
+           curl -s -L "https://raw.githubusercontent.com/snowdrop/k8s-infra/main/kind/registry.sh" | bash -s install
+           curl -s -L "https://raw.githubusercontent.com/snowdrop/k8s-infra/main/kind/kind.sh" | bash -s install
+           
+           # Adding registry name to the /etc/hosts file
+           echo "127.0.0.1 $REGISTRY_NAME" | sudo tee -a /etc/hosts
+
+           # Exporting the registry location for subsequent jobs
+           echo "KIND_REGISTRY=${REGISTRY_NAME}:${REGISTRY_PORT}" >> $GITHUB_ENV
+
+       - name: Setup tools
+         env:
+           KUBECTL_VERSION=v1.28.1
+         run: |
+           echo "Installing kubectl"
+           curl -LO "https://dl.k8s.io/release/$KUBECTL_VERSION/bin/linux/amd64/kubectl
+
+           echo "Successfully installed kubectl at ${KUBECTL}:"
+           kubectl version --client
