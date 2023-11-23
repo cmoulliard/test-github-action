@@ -4,10 +4,10 @@ on:
   workflow_dispatch:
 
 env:
-  KUBEVIRT_VERSION=v1.0.0
-  KUBEVIRT_CDI_VERSION=v1.57.0
-  KUBEVIRT_COMMON_INSTANCETYPES_VERSION=v0.3.2
-  KUBEVIRT_USE_EMULATION="true"
+  KUBEVIRT_VERSION: v1.0.0
+  KUBEVIRT_CDI_VERSION: v1.57.0
+  KUBEVIRT_COMMON_INSTANCETYPES_VERSION: v0.3.2
+  KUBEVIRT_USE_EMULATION: "true"
 
 jobs:
   kubevirt:
@@ -29,7 +29,7 @@ jobs:
 
        - name: Setup tools
          env:
-           KUBECTL_VERSION=v1.28.1
+           KUBECTL_VERSION: v1.28.1
          run: |
            echo "Installing kubectl"
            curl -LO "https://dl.k8s.io/release/$KUBECTL_VERSION/bin/linux/amd64/kubectl
