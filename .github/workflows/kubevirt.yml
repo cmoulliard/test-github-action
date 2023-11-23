@@ -52,11 +52,8 @@ jobs:
            echo "Virtualization:"
            LC_ALL=C lscpu | grep Virtualization
 
-       - name: Install qemu
-         run: |
-           sudo apt-get update && sudo apt-get upgrade
-           sudo apt install qemu-kvm bridge-utils
-           sudo systemctl enable libvirtd.service && sudo systemctl start libvirtd.service
+       - name: Setup qemu
+         uses: docker/setup-qemu-action@v3
 
        - name: Deploy kubevirt
          run: |
