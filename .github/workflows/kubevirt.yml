@@ -53,6 +53,10 @@ jobs:
          
            echo "Successfully deployed KubeVirt:"
            kubectl get pods -n kubevirt
+           
+           echo "Deploying KubeVirt containerized-data-importer"
+           kubectl apply -f "https://github.com/kubevirt/containerized-data-importer/releases/download/${KUBEVIRT_CDI_VERSION}/cdi-operator.yaml"
+           kubectl apply -f "https://github.com/kubevirt/containerized-data-importer/releases/download/${KUBEVIRT_CDI_VERSION}/cdi-cr.yaml"
 
        - name: Creating a VM
          run: |
