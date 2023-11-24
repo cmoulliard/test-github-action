@@ -183,9 +183,12 @@ jobs:
            
            echo "########### All PODs ################"
            kubectl get pod -A
+
+           #echo "######### Services ################"
+           #kubectl get svc -A
            
-           echo "######### PVC ################"
-           kubectl get pvc -A
+           #echo "######### PVC ################"
+           #kubectl get pvc -A
            
-           echo "########### SC ####################"
-           kubectl get sc -A -oyaml
+           #echo "########### SC ####################"
+           #kubectl get sc -A -oyaml
