@@ -146,7 +146,7 @@ jobs:
            echo ">>>> Command to be executed to check healthiness of podman & socat"
            echo ">>>> kubectl exec podname-client -- podman \"-r\" \"--url=tcp://$VM_IP:2376\" \"version\""
            while true; do
-               kubectl exec podname-client -- podman "-r" "--url=tcp://$VM_IP:2376" "version" &> /dev/null
+               kubectl exec podname-client -- podman "-r" "--url=tcp://$VM_IP:2376" "version"
                if [ $? -eq 0 ]; then
                    echo "Command within the pod succeeded."
                    break
