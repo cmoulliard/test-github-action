@@ -78,9 +78,9 @@ jobs:
            NODE_NAME=$(kubectl get nodes -o=jsonpath='{.items[0].metadata.name}')
            echo "Node name is: $NODE_NAME"
            
-           docker exec -t $NODE_NAME bash -c "echo 'fs.inotify.max_user_watches=1048576' >> /etc/sysctl.conf"
-           docker exec -t $NODE_NAME bash -c "echo 'fs.inotify.max_user_instances=512' >> /etc/sysctl.conf"
-           docker exec -i $NODE_NAME bash -c "sysctl -p /etc/sysctl.conf"
+           #docker exec -t $NODE_NAME bash -c "echo 'fs.inotify.max_user_watches=1048576' >> /etc/sysctl.conf"
+           #docker exec -t $NODE_NAME bash -c "echo 'fs.inotify.max_user_instances=512' >> /etc/sysctl.conf"
+           #docker exec -i $NODE_NAME bash -c "sysctl -p /etc/sysctl.conf"
   
            echo "Deploying KubeVirt"
            kubectl apply -f "https://github.com/kubevirt/kubevirt/releases/download/${KUBEVIRT_VERSION}/kubevirt-operator.yaml"
@@ -98,6 +98,7 @@ jobs:
            echo "Waiting for KubeVirt to be ready"
            kubectl wait --for=condition=Available kubevirt kubevirt --namespace=kubevirt --timeout=5m
            
+           # Needed as Storage class is not equal by default to local
            kubectl patch --type merge -p '{"spec": {"claimPropertySets": [{"accessModes": ["ReadWriteOnce"]}]}}' StorageProfile standard
          
            echo "Successfully deployed KubeVirt, CDI:"
@@ -106,13 +107,12 @@ jobs:
                 
            # Create local-volume directories, which, on other providers, are pre-provisioned.
            # For more info, check https://github.com/kubevirt/kubevirtci/blob/master/cluster-provision/STORAGE.md
-           for i in {1..10}; do
-             mount_disk $NODE_NAME $i
-           done
-           docker exec $NODE_NAME bash -c "chmod -R 777 /var/local/kubevirt-storage/local-volume"
-           
-           echo "# Create the local storage class"
-           kubectl apply -f .github/resources/local-volume.yaml
+           # for i in {1..10}; do
+           #   mount_disk $NODE_NAME $i
+           # done
+           # docker exec $NODE_NAME bash -c "chmod -R 777 /var/local/kubevirt-storage/local-volume"
+           #echo "# Create the local storage class"
+           #kubectl apply -f .github/resources/local-volume.yaml
 
        - name: Creating a VM
          run: |
@@ -129,8 +129,7 @@ jobs:
            #kubectl get vmi -A
            
            kubectl wait --for=condition=Ready vm/fedora38 --timeout=5m
-           
-           kubectl get vmi
+          
            kubectl get vmi -o jsonpath='{.items[0].status.interfaces[0].ipAddress}'
            
        - name: (Only if it failed) Log messages
