@@ -97,6 +97,8 @@ jobs:
            
            echo "Waiting for KubeVirt to be ready"
            kubectl wait --for=condition=Available kubevirt kubevirt --namespace=kubevirt --timeout=5m
+           
+           kubectl patch --type merge -p '{"spec": {"claimPropertySets": [{"accessModes": ["ReadWriteOnce"]}]}}' StorageProfile standard
          
            echo "Successfully deployed KubeVirt, CDI:"
            kubectl get pods -n kubevirt
