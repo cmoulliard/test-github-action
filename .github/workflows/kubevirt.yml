@@ -124,7 +124,38 @@ jobs:
            kubectl apply -f .github/resources/vm-fedora38.yml
            
            kubectl wait --for=condition=Ready vm/fedora38 --timeout=5m
-           kubectl get vmi -o jsonpath='{.items[0].status.interfaces[0].ipAddress}'
+
+       - name: Wait till podman replies
+         run: |
+           VM_IP=$(kubectl get vmi -o jsonpath='{.items[0].status.interfaces[0].ipAddress}')
+           
+           # Launch the podman client
+           kubectl run podname-client --image=quay.io/podman/stable -- "sleep" "1000000" &
+          
+           # Wait for the pod to be in the Running state
+           while true; do
+              pod_status=$(kubectl get pod podname-client -ojsonpath='{.status.phase}')
+              if [ "$pod_status" == "Running" ]; then
+                  break
+              fi
+              sleep 1
+           done
+           echo "Pod podname-client is in the Running state."
+           
+           echo "Wait for the command within the pod to succeed"
+           echo ">>>> Command to be executed to check healthiness of podman & socat"
+           echo ">>>> kubectl exec podname-client -- podman \"-r\" \"--url=tcp://$VM_IP:2376\" \"version\""
+           while true; do
+               kubectl exec podname-client -- podman "-r" "--url=tcp://$VM_IP:2376" "version" &> /dev/null
+               if [ $? -eq 0 ]; then
+                   echo "Command within the pod succeeded."
+                   break
+               else
+                   echo "Remote podman is not yet ready to reply.."
+               fi
+               sleep 20
+           done
+           kubectl delete pod podname-client
            
        - name: (Only if it failed) Log messages
          if: failure()
