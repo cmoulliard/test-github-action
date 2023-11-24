@@ -137,6 +137,10 @@ jobs:
            echo "########### Virt Handler & controller logs ################"
            kubectl logs -lkubevirt.io=virt-handler -n kubevirt
            kubectl logs -lkubevirt.io=virt-controller -n kubevirt
+
+           echo "########### DataVolume ################"
+           kubectl describe datavolume/fedora38
+           kubectl get datavolume/fedora38 -oyaml
            
            echo "########### Describe VM ################"
            echo "Describe virtualmachine/fedora38"
