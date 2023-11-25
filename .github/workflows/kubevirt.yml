@@ -126,7 +126,7 @@ jobs:
            kubectl wait --for=condition=Ready vm/fedora38 --timeout=5m
            
            # Create a k8s service to expose the socat port
-           kubectl create service clusterip podman-remote --tcp=5678:808
+           kubectl apply -f .github/resources/service-3672.yml
 
        - name: Wait till podman replies
          run: |
@@ -147,9 +147,9 @@ jobs:
            
            echo "Wait for the command within the pod to succeed"
            echo ">>>> Command to be executed to check healthiness of podman & socat"
-           echo ">>>> kubectl exec podname-client -- podman \"-r\" \"--url=tcp://$VM_IP:2376\" \"version\""
+           echo ">>>> kubectl exec podname-client -- podman \"-r\" \"--url=tcp://podman-remote:2376\" \"version\""
            while true; do
-               kubectl exec podname-client -- podman "-r" "--url=tcp://$VM_IP:2376" "version"
+               kubectl exec podname-client -- podman "-r" "--url=tcp://podman-remote:2376" "version"
                if [ $? -eq 0 ]; then
                    echo "Command within the pod succeeded."
                    break

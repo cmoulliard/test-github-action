@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: podman-remote
+spec:
+  ports:
+    - protocol: TCP
+      port: 2376
+      targetPort: 2376
+  selector:
+    kubevirt.io/domain: fedora38
+  sessionAffinity: None
+  type: ClusterIP
