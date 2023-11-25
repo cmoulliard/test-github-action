@@ -126,7 +126,7 @@ jobs:
            kubectl wait --for=condition=Ready vm/fedora38 --timeout=5m
            
            # Create a k8s service to expose the socat port
-           kubectl apply -f .github/resources/service-3672.yml
+           kubectl apply -f .github/resources/service-2376.yml
 
        - name: Wait till podman replies
          run: |
