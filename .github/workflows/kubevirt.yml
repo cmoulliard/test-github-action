@@ -52,8 +52,9 @@ jobs:
            echo "Virtualization:"
            LC_ALL=C lscpu | grep Virtualization
 
-       - name: Setup qemu
-         uses: docker/setup-qemu-action@v3
+       # To be validated, but it seems that we don't need it ...
+       #- name: Setup qemu
+       #  uses: docker/setup-qemu-action@v3
 
        - name: Deploy kubevirt
          run: |
