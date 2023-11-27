@@ -43,23 +43,21 @@ jobs:
          run: |
            kind create cluster
 
-       - name: Log versions
+       - name: Log OS, kube tools, container versions
          run: |
-           echo "OS:"
+           echo "########### OS ###########"
            cat /etc/os-release
            
-           echo "Kind version:"
+           echo "########### Kind version ###########"
            kind --version
            
+           echo "########### Docker version ###########"
            docker -v
            
-           echo "kubectl version:"
+           echo "########### kubectl version ###########"
            kubectl version --client
            
-           echo "Kubevirt version: $KUBEVIRT_VERSION"
-           
-           echo "Virtualization:"
-           LC_ALL=C lscpu | grep Virtualization
+           echo "########### Kubevirt version: $KUBEVIRT_VERSION ###########"
 
        # To be validated, but it seems that we don't need it ...
        #- name: Setup qemu
