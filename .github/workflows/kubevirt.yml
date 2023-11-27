@@ -154,12 +154,14 @@ jobs:
            echo "Podman client routes"
            kubectl get po/podname-client -ojson | jq -r '.metadata.annotations."k8s.ovn.org/pod-networks"' | jq
            kubectl get svc -A
+           SERVICE_IP=$(kubectl get svc/podman-remote -ojson | jq -r '.spec.clusterIP')
+           echo "Service IP is: $SERVICE_IP" 
            
            echo "Wait for the command within the pod to succeed"
            echo ">>>> Command to be executed to check healthiness of podman & socat"
-           echo ">>>> kubectl exec podname-client -- podman \"-r\" \"--url=tcp://$VM_IP:2376\" \"version\""
+           echo ">>>> kubectl exec podname-client -- podman \"-r\" \"--url=tcp://$SERVICE_IP:2376\" \"version\""
            while true; do
-               kubectl exec podname-client -- podman "-r" "--url=tcp://$VM_IP:2376" "version"
+               kubectl exec podname-client -- podman "-r" "--url=tcp://$SERVICE_IP:2376" "version"
                if [ $? -eq 0 ]; then
                    echo "Command within the pod succeeded."
                    break
