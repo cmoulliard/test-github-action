@@ -151,6 +151,10 @@ jobs:
            echo "/etc/hosts file of podman client"
            kubectl exec podname-client -- cat /etc/hosts
            
+           echo "Podman client routes"
+           kubectl get po/podname-client -ojson | jq -r '.metadata.annotations."k8s.ovn.org/pod-networks"' | jq
+           kubectl get svc -A
+           
            echo "Wait for the command within the pod to succeed"
            echo ">>>> Command to be executed to check healthiness of podman & socat"
            echo ">>>> kubectl exec podname-client -- podman \"-r\" \"--url=tcp://podman-remote:2376\" \"version\""
