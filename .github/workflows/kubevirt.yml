@@ -146,6 +146,8 @@ jobs:
            # Wait for the pod to be in the Running state
            kubectl wait --for condition=Ready pod/podname-client --timeout=5m
            
+           kubectl get pods
+           
            echo "/etc/hosts file of podman client"
            kubectl exec podname-client -- cat /etc/hosts
            
