@@ -130,7 +130,8 @@ jobs:
 
        - name: Wait till podman replies
          run: |
-           #VM_IP=$(kubectl get vmi -o jsonpath='{.items[0].status.interfaces[0].ipAddress}')
+           VM_IP=$(kubectl get vmi -o jsonpath='{.items[0].status.interfaces[0].ipAddress}')
+           echo "VM IP is: $VM_IP"
            
            # Launch the podman client
            kubectl run podname-client --image=quay.io/podman/stable -- "sleep" "1000000" &
