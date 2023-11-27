@@ -138,15 +138,7 @@ jobs:
            kubectl run podname-client --image=quay.io/podman/stable -- "sleep" "1000000" &
           
            # Wait for the pod to be in the Running state
-           while true; do
-              pod_status=$(kubectl get pod podname-client -ojsonpath='{.status.phase}')
-              if [ "$pod_status" == "Running" ]; then
-                  break
-              fi
-              echo "podman client is not yet running ..."
-              sleep 5
-           done
-           echo "Pod podname-client is in the Running state."
+           kubectl wait pod podname-client --for condition=Ready --timeout=180s
            
            echo "Wait for the command within the pod to succeed"
            echo ">>>> Command to be executed to check healthiness of podman & socat"
