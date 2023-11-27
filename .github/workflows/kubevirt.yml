@@ -159,32 +159,28 @@ jobs:
        - name: (Only if it failed) Log messages
          if: failure()
          run: |
+           echo "########### All PODs ################"
+           kubectl get pod -A
+
+           echo "######### All services ################"
+           kubectl get svc -A
+           
            echo "########### Virt Handler & controller logs ################"
            kubectl logs -lkubevirt.io=virt-handler -n kubevirt
            kubectl logs -lkubevirt.io=virt-controller -n kubevirt
-
-           echo "########### DataVolume ################"
-           kubectl describe datavolume/fedora38
-           kubectl get datavolume/fedora38 -oyaml
-           
-           echo "########### Describe VM ################"
-           echo "Describe virtualmachine/fedora38"
-           kubectl describe virtualmachine/fedora38
            
            echo "########### VM status ################"
            kubectl get virtualmachine/fedora38 -oyaml
            
+           echo "########### Describe VM ################"
+           kubectl describe virtualmachine/fedora38
+           
+           echo "########### DataVolume ################"
+           kubectl describe datavolume/fedora38
+           #kubectl get datavolume/fedora38 -oyaml
+           
            echo "########### VMI status ################"
            kubectl get vmi -A -oyaml
-           
-           echo "########### VM POD ################"
-           kubectl get pod -lvm.kubevirt.io/name=fedora38 -oyaml
-           
-           echo "########### All PODs ################"
-           kubectl get pod -A
-
-           echo "######### Services ################"
-           kubectl get svc -A
            
            #echo "######### PVC ################"
            #kubectl get pvc -A
