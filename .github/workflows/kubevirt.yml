@@ -133,12 +133,12 @@ jobs:
          run: |
            VM_IP=$(kubectl get vmi -o jsonpath='{.items[0].status.interfaces[0].ipAddress}')
            echo "VM IP is: $VM_IP"
-           set -x
+
            # Launch the podman client
            kubectl run podname-client --image=quay.io/podman/stable -- "sleep" "1000000" &
           
            # Wait for the pod to be in the Running state
-           kubectl wait pod podname-client --for condition=Ready --timeout=180s
+           kubectl wait pod podname-client --for condition=Ready --timeout=240s
            
            echo "Wait for the command within the pod to succeed"
            echo ">>>> Command to be executed to check healthiness of podman & socat"
