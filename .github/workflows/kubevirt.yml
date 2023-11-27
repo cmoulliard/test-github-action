@@ -133,7 +133,7 @@ jobs:
          run: |
            VM_IP=$(kubectl get vmi -o jsonpath='{.items[0].status.interfaces[0].ipAddress}')
            echo "VM IP is: $VM_IP"
-           
+           set -x
            # Launch the podman client
            kubectl run podname-client --image=quay.io/podman/stable -- "sleep" "1000000" &
           
@@ -153,6 +153,7 @@ jobs:
                fi
                sleep 20
            done
+           set+x
            #kubectl delete pod podname-client
            
        - name: (Only if it failed) Log messages
