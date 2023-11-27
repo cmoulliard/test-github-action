@@ -130,7 +130,7 @@ jobs:
 
        - name: Wait till podman replies
          run: |
-           VM_IP=$(kubectl get vmi -o jsonpath='{.items[0].status.interfaces[0].ipAddress}')
+           #VM_IP=$(kubectl get vmi -o jsonpath='{.items[0].status.interfaces[0].ipAddress}')
            
            # Launch the podman client
            kubectl run podname-client --image=quay.io/podman/stable -- "sleep" "1000000" &
@@ -141,7 +141,8 @@ jobs:
               if [ "$pod_status" == "Running" ]; then
                   break
               fi
-              sleep 1
+              echo "podman client is not yet running ..."
+              sleep 5
            done
            echo "Pod podname-client is in the Running state."
            
@@ -158,7 +159,7 @@ jobs:
                fi
                sleep 20
            done
-           kubectl delete pod podname-client
+           #kubectl delete pod podname-client
            
        - name: (Only if it failed) Log messages
          if: failure()
