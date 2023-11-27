@@ -65,13 +65,13 @@ jobs:
 
        - name: Deploy kubevirt
          run: |
-           function mount_disk() {
-             node=$1
-             idx=$2
-             docker exec $node bash -c "mkdir -p /var/local/kubevirt-storage/local-volume/disk${idx}"
-             docker exec $node bash -c "mkdir -p /mnt/local-storage/local/disk${idx}"
-             docker exec $node bash -c "mount -o bind /var/local/kubevirt-storage/local-volume/disk${idx} /mnt/local-storage/local/disk${idx}"
-           }
+           #function mount_disk() {
+           #  node=$1
+           #  idx=$2
+           #  docker exec $node bash -c "mkdir -p /var/local/kubevirt-storage/local-volume/disk${idx}"
+           #  docker exec $node bash -c "mkdir -p /mnt/local-storage/local/disk${idx}"
+           #  docker exec $node bash -c "mount -o bind /var/local/kubevirt-storage/local-volume/disk${idx} /mnt/local-storage/local/disk${idx}"
+           #}
            
            function is_nested_virt_enabled() {
              kvm_nested="unknown"
@@ -145,6 +145,9 @@ jobs:
           
            # Wait for the pod to be in the Running state
            kubectl wait --for condition=Ready pod/podname-client --timeout=5m
+           
+           echo "/etc/hosts file of podman client"
+           kubectl exec podname-client -- cat /etc/hosts
            
            echo "Wait for the command within the pod to succeed"
            echo ">>>> Command to be executed to check healthiness of podman & socat"
