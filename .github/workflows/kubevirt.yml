@@ -39,10 +39,17 @@ jobs:
        #    echo "Installing kubectl"
        #    curl -LO "https://dl.k8s.io/release/$KUBECTL_VERSION/bin/linux/amd64/kubectl"
 
+       - name: Create kind cluster
+         run: |
+           kind create cluster
+
        - name: Log versions
          run: |
            echo "OS:"
            cat /etc/os-release
+           
+           echo "Kind version:"
+           kind --version
            
            docker -v
            
