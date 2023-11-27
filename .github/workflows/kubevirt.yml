@@ -16,26 +16,28 @@ jobs:
        - name: Checkout
          uses: actions/checkout@v3
 
-       - name: Setup kind cluster
-         env:
-           REGISTRY_NAME: kind-registry
-           REGISTRY_PORT: 5000
-         run: |
-           curl -s -L "https://raw.githubusercontent.com/snowdrop/k8s-infra/main/kind/registry.sh" | bash -s install
-           curl -s -L "https://raw.githubusercontent.com/snowdrop/k8s-infra/main/kind/kind.sh" | bash -s install
-           
-           # Adding registry name to the /etc/hosts file
-           echo "127.0.0.1 $REGISTRY_NAME" | sudo tee -a /etc/hosts
+       # NOT NEEDED as ubuntu image already install: kind, kubectl, minikube, kustomize, helm: https://github.com/actions/runner-images/blob/main/images/ubuntu/scripts/build/install-kubernetes-tools.sh#L11-L41
+       # - name: Setup kind cluster
+       #  env:
+       #    REGISTRY_NAME: kind-registry
+       #    REGISTRY_PORT: 5000
+       #  run: |
+       #    curl -s -L "https://raw.githubusercontent.com/snowdrop/k8s-infra/main/kind/registry.sh" | bash -s install
+       #    curl -s -L "https://raw.githubusercontent.com/snowdrop/k8s-infra/main/kind/kind.sh" | bash -s install
+       #
+       #    # Adding registry name to the /etc/hosts file
+       #    echo "127.0.0.1 $REGISTRY_NAME" | sudo tee -a /etc/hosts
+       #
+       #    # Exporting the registry location for subsequent jobs
+       #    echo "KIND_REGISTRY=${REGISTRY_NAME}:${REGISTRY_PORT}" >> $GITHUB_ENV
 
-           # Exporting the registry location for subsequent jobs
-           echo "KIND_REGISTRY=${REGISTRY_NAME}:${REGISTRY_PORT}" >> $GITHUB_ENV
-
-       - name: Setup tools
-         env:
-           KUBECTL_VERSION: v1.28.1
-         run: |
-           echo "Installing kubectl"
-           curl -LO "https://dl.k8s.io/release/$KUBECTL_VERSION/bin/linux/amd64/kubectl"
+       #        # NOT NEEDED as ubuntu image already install: kind, kubectl, minikube, kustomize, helm: https://github.com/actions/runner-images/blob/main/images/ubuntu/scripts/build/install-kubernetes-tools.sh#L11-L41
+       #- name: Setup tools
+       #  env:
+       #    KUBECTL_VERSION: v1.28.1
+       #  run: |
+       #    echo "Installing kubectl"
+       #    curl -LO "https://dl.k8s.io/release/$KUBECTL_VERSION/bin/linux/amd64/kubectl"
 
        - name: Log versions
          run: |
@@ -134,7 +136,7 @@ jobs:
            echo "VM IP is: $VM_IP"
 
            # Launch the podman client
-           kubectl run podname-client --image=quay.io/podman/stable -- "sleep" "1000000" &
+           kubectl run podname-client --image=quay.io/podman/stable -- "sleep" "1000000" & 
           
            # Wait for the pod to be in the Running state
            kubectl wait --for condition=Ready pod/podname-client --timeout=5m
