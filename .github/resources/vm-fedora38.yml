@@ -51,9 +51,9 @@ spec:
               name: cloudinitdisk
           interfaces:
             - masquerade: {}
-              #model: virtio
+              #model: virtio # default model is virtio: https://kubevirt.io/user-guide/virtual_machines/interfaces_and_networks/#masquerade-ipv4-and-ipv6-dual-stack-support
               name: default
-          networkInterfaceMultiqueue: true
+          networkInterfaceMultiqueue: false
           rng: {}
         features:
           acpi: {}
