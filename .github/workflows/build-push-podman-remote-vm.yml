@@ -22,7 +22,7 @@ jobs:
         run: |
           curl -L -o disk.img ${OS_IMAGE}
 
-      - name: Install needed tools
+      - name: Customize the VM
         run: |
           export LIBGUESTFS_DEBUG=1 LIBGUESTFS_TRACE=1
           sudo virt-customize -a disk.img --install cloud-init,podman,openssh-server,socat,qemu-guest-agent
@@ -32,3 +32,26 @@ jobs:
             --run .github/resources/customize-vm -v
 
           sudo virt-sparsify --in-place disk.img
+          ls -la disk.img
+
+      - name: Docker meta
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ch007m/quarkus-dev-vm
+
+      - name: Login to Quay.io
+        uses: docker/login-action@v3
+        with:
+          registry: quay.io
+          username: ${{ secrets.QUAY_USERNAME }}
+          password: ${{ secrets.QUAY_ROBOT_TOKEN }}
+
+      -  name: Build and push
+         uses: docker/build-push-action@v5
+         with:
+           context: .
+           file: .github/resources/Dockerfile
+           #push: ${{ github.event_name != 'pull_request' }}
+           tags: ${{ steps.meta.outputs.tags }}
+           labels: ${{ steps.meta.outputs.labels }}

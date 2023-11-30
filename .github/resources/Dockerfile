@@ -1,3 +1,3 @@
 FROM scratch
 
-COPY ./disk.img /disk/
+COPY disk.img /disk/
