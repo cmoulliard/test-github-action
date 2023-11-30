@@ -38,7 +38,7 @@ jobs:
         id: build-image
         uses: redhat-actions/buildah-build@v2
         with:
-          image: quay.io/ch007m/quarkus-dev-vm
+          image: quarkus-dev-vm
           tags: latest ${{ github.sha }}
           containerfiles: |
             .github/resources/Dockerfile
