@@ -92,6 +92,7 @@ spec:
           value: "tcp://$(tasks.virtualmachine.results.ip):2376"
         - name: GOALS
           value:
+          - -B
           - test
       workspaces:
         - name: maven-settings
