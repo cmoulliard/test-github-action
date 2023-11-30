@@ -198,9 +198,11 @@ jobs:
              else
                 echo "###################### BEGIN ####################################"
                 echo "PipelineRun is still running ..."
-                tkn pipelinerun describe quarkus-maven-build-run -o json | jq -r '.status.conditions[] | .message'
-                echo "####################################################################"
-                tkn pipelinerun describe quarkus-maven-build-run
+                RESPONSE=$(tkn pipelinerun describe quarkus-maven-build-run -o json | jq -r '.status.conditions[] | .message')
+                if [ "$RESPONSE" =~ "Failed" ]; then
+                   tkn taskrun describe quarkus-maven-build-run-maven-test
+                   exit 1
+                fi
                 echo "###################### END ####################################"
              fi
              sleep 20
