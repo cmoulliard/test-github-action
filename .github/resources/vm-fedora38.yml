@@ -1,15 +1,15 @@
 apiVersion: kubevirt.io/v1
 kind: VirtualMachine
 metadata:
-  name: fedora38
+  name: quarkus-dev-vm
   labels:
-    app: fedora38
+    app: quarkus-dev-vm
 spec:
   dataVolumeTemplates:
     - apiVersion: cdi.kubevirt.io/v1beta1
       kind: DataVolume
       metadata:
-        name: fedora38
+        name: quarkus-dev-vm
       spec:
         source:
           registry:
@@ -26,7 +26,7 @@ spec:
         vm.kubevirt.io/os: fedora
         vm.kubevirt.io/workload: server
       labels:
-        kubevirt.io/domain: fedora38
+        kubevirt.io/domain: quarkus-dev-vm
         kubevirt.io/size: small
     spec:
       accessCredentials:
@@ -74,5 +74,5 @@ spec:
               #- curl -sSL https://raw.githubusercontent.com/iocanel/openshift-vm-playground/main/resources/config.sh | bash
           name: cloudinitdisk
         - dataVolume:
-            name: fedora38
+            name: quarkus-dev-vm
           name: rootdisk
