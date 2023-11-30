@@ -31,4 +31,4 @@ jobs:
             --root-password password:test \
             --run .github/resources/customize-vm -v
 
-          virt-sparsify --in-place disk.img
+          sudo virt-sparsify --in-place disk.img
