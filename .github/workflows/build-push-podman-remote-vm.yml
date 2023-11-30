@@ -26,3 +26,9 @@ jobs:
         run: |
           export LIBGUESTFS_DEBUG=1 LIBGUESTFS_TRACE=1
           sudo virt-customize -a disk.img --install cloud-init,podman,openssh-server,socat,qemu-guest-agent
+          
+          sudo virt-customize -a disk.img \
+            --root-password password:test \
+            --run .github/resources/customize-vm -v
+
+          virt-sparsify --in-place disk.img
