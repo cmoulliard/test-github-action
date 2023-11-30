@@ -98,6 +98,7 @@ spec:
           workspace: maven-settings
         - name: project-dir
           workspace: project-dir
+
     - name: maven-build-image-deploy
       runAfter:
         - maven-test
