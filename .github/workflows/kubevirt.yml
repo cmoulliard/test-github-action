@@ -8,6 +8,8 @@ env:
   KUBEVIRT_CDI_VERSION: v1.57.0
   KUBEVIRT_COMMON_INSTANCETYPES_VERSION: v0.3.2
   KUBEVIRT_USE_EMULATION: "true"
+  KUBEVIRT_TEKTON_TASKS: v0.16.0
+  TEKTON_CLIENT: 0.33.0
 
 jobs:
   kubevirt:
@@ -122,6 +124,17 @@ jobs:
            #echo "# Create the local storage class"
            #kubectl apply -f .github/resources/local-volume.yaml
 
+       - name: Deploy Tekton & Kubevirt tasks
+         run: |
+           kubectl apply --filename https://storage.googleapis.com/tekton-releases/pipeline/latest/release.yaml
+           kubectl wait deployment -n tekton-pipelines tekton-pipelines-controller --for condition=Available=True --timeout=90s
+           kubectl wait deployment -n tekton-pipelines tekton-pipelines-webhook --for condition=Available=True --timeout=90s
+           
+           #https://github.com/kubevirt/kubevirt-tekton-tasks/releases/download/${KUBEVIRT_TEKTON_TASKS}/kubevirt-tekton-tasks-kubernetes.yaml
+           
+           curl -LO https://github.com/tektoncd/cli/releases/download/v${TEKTON_CLIENT}/tektoncd-cli-${TEKTON_CLIENT}_Linux-64bit.deb
+           sudo dpkg -i ./tektoncd-cli-${TEKTON_CLIENT}_Linux-64bit.deb
+
        - name: Creating a VM
          run: |
            echo "## Creating the kubernetes secret storing the public key"
@@ -167,7 +180,20 @@ jobs:
            done
 
            #kubectl delete pod podname-client
+
+       - name: Run our test case
+         run : |
+           kubectl apply -f pipelines/tasks/git-clone.yaml
+           kubectl apply -f pipelines/tasks/rm-workspace.yaml
+           kubectl apply -f pipelines/tasks/ls-workspace.yaml
+           kubectl apply -f pipelines/tasks/maven.yaml
+           kubectl apply -f pipelines/tasks/virtualmachine.yaml
+           kubectl apply -f pipelines/pipelines/quarkus-maven-build.yaml
+           kubectl apply -f pipelines/pipelineruns/quarkus-maven-build-run.yaml
            
+           tkn pr logs quarkus-maven-build-run -f
+           
+
        - name: (Only if it failed) Log messages
          if: failure()
          run: |

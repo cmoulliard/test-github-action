@@ -1,0 +1,17 @@
+apiVersion: tekton.dev/v1beta1
+kind: TaskRun
+metadata:
+  name: maven-run
+spec:
+  taskRef:
+    name: maven
+  params:
+    - name: DOCKER_HOST
+      value: "tcp://$(tasks.virtualmachine.results.ip):2376"
+  workspaces:
+    - name: project-dir
+      persistentVolumeClaim:
+        claimName: project-pvc
+    - name: maven-settings
+      configMap:
+        name: maven-settings

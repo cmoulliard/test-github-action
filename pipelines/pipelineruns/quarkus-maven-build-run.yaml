@@ -1,0 +1,24 @@
+apiVersion: tekton.dev/v1
+kind: PipelineRun
+metadata:
+  name: quarkus-maven-build-run
+spec:
+  pipelineRef:
+    name: quarkus-maven-build
+  params:
+    - name: debug
+      value: "false"
+    - name: url
+      value: "https://github.com/iocanel/quarkus-helloworld"
+    - name: virtualMachineName
+      value: "fedora38"
+  workspaces:
+    - name: project-dir
+      persistentVolumeClaim:
+        claimName: project-pvc
+    - name: maven-m2-repo
+      persistentVolumeClaim:
+        claimName: m2-repo-pvc
+    - name: maven-settings
+      configMap:
+        name: maven-settings

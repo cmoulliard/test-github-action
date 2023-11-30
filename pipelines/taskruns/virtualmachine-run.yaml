@@ -1,0 +1,10 @@
+apiVersion: tekton.dev/v1beta1
+kind: TaskRun
+metadata:
+  name: virtualmachine-run
+spec:
+  taskRef:
+    name: virtualmachine
+  params:
+    - name: name
+      value: fedora37
