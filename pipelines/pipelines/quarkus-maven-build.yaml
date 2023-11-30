@@ -112,7 +112,7 @@ spec:
             - quarkus:deploy
             - -B
             - -Dquarkus.kubernetes.build-strategy=docker
-            - -Dquarkus.kubernetes.deploy=true
+            - -Dquarkus.kubernetes.deploy=false
             - -Dquarkus.log.level=DEBUG
       workspaces:
         - name: maven-settings
