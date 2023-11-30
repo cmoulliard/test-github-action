@@ -20,7 +20,7 @@ jobs:
 
       - name: Download the Fedora Cloud image
         run: |
-          curl -L -o disk.img ${IMAGE}
+          curl -L -o disk.img ${OS_IMAGE}
 
       - name: Install needed tools
         run: |
