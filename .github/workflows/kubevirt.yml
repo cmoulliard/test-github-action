@@ -183,6 +183,16 @@ jobs:
            kubectl apply -f pipelines/pipelineruns/quarkus-maven-build-run.yaml
            
            #tkn pr logs quarkus-maven-build-run -f
+           while true; do
+             STATUS=$(tkn pipelinerun describe podman-remote-run -o json | jq -r '.status.conditions[] | select(.type=="Succeeded") | true')
+             if [ "$STATUS" == "true" ]; then
+                echo "Pipeline run succeeded."
+                break
+             else
+                echo "PipelineRun is still running
+             fi
+             sleep 10
+           done
 
        - name: (Only if it succeeded) Log messages
          if: success()
