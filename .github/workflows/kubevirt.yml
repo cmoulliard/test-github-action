@@ -189,7 +189,7 @@ jobs:
                 echo "Pipeline run succeeded."
                 break
              else
-                echo "PipelineRun is still running
+                echo "PipelineRun is still running ..."
              fi
              sleep 10
            done
