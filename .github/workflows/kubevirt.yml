@@ -192,15 +192,15 @@ jobs:
            
            STATUS=$(kubectl get pipelinerun quarkus-maven-build-run -o json | jq -rc .status.conditions[0].status)
            LIMIT=$((SECONDS+360))
-           while [ "${STATUS}" != "Unknown" ]; do
-             if [ $SECONDS -gt $LIMIT ]
-             then
+           while [ "${STATUS}" != "Failed" ]; do
+             if [ $SECONDS -gt $LIMIT ]; then
                echo "Timeout waiting for PipelineRun to complete"
                exit 2
+            else
+               tkn pipelinerun logs quarkus-maven-build-run
              fi
              sleep 20
-             echo "Waiting for PipelineRun to complete"
-             kubectl get pipelinerun quarkus-maven-build-run -o json | jq -rc .status.conditions[0]
+             echo "Waiting for PipelineRun to complete ..."
              STATUS=$(kubectl get pipelinerun quarkus-maven-build-run -o json | jq -rc .status.conditions[0].status)
            done
            
