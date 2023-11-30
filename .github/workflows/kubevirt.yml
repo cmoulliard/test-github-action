@@ -182,7 +182,12 @@ jobs:
            kubectl apply -f pipelines/pipelines/quarkus-maven-build.yaml
            kubectl apply -f pipelines/pipelineruns/quarkus-maven-build-run.yaml
            
-           tkn pr logs quarkus-maven-build-run -f
+           #tkn pr logs quarkus-maven-build-run -f
+
+       - name: (Only if it succeeded) Log messages
+         if: success()
+         run: |
+           tkn pr logs quarkus-maven-build-run
 
        - name: (Only if it failed) Log messages
          if: failure()
