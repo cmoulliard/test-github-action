@@ -148,7 +148,7 @@ jobs:
        - name: Grant more rights to the default SA to access Kubevirt API
          run: |
            kubectl create clusterrolebinding pod-kubevirt-viewer --clusterrole=kubevirt.io:view --serviceaccount=default:default
-           kubectl get clusterrolebinding pod-kubevirt-viewer -oyaml
+           # kubectl get clusterrolebinding pod-kubevirt-viewer -oyaml
 
        - name: Wait till podman replies
          run: |
@@ -175,8 +175,6 @@ jobs:
                sleep 20
            done
 
-           #kubectl delete pod podname-client
-
        - name: Run our test case
          run : | 
            kubectl apply -f pipelines/setup/project-pvc.yaml
@@ -192,9 +190,9 @@ jobs:
            kubectl apply -f pipelines/pipelineruns/quarkus-maven-build-run.yaml
            
            echo "Wait a few second till the pipelineRun is created/started"
-           # tkn pipelinerun describe quarkus-maven-build-run
            sleep 10s
            
+           echo "Follow the pipeline log"
            tkn pipelinerun logs quarkus-maven-build-run -f
            tkn pipelinerun describe quarkus-maven-build-run
            kubectl get pipelinerun quarkus-maven-build-run -o json | jq -rc .status.conditions[0].status
