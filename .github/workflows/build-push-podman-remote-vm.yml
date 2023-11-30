@@ -15,7 +15,7 @@ jobs:
 
       - name: Install libguestfs tools
         run: |
-          apt-get -y install libguestfs-tools
+          sudo apt-get -y install libguestfs-tools
 
       - name: Download the Fedora Cloud image
         run: |
