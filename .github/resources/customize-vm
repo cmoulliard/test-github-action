@@ -1,7 +1,7 @@
 sudo useradd -m fedora -s /bin/bash
 sudo echo "fedora ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers.d/fedora
 sudo echo fedora | passwd fedora --stdin
-sudo sed -i 's/SELINUX=.*/SELINUX=disabled/g' /etc/selinux/config"
+sudo sed -i 's/SELINUX=.*/SELINUX=disabled/g' /etc/selinux/config
 sudo dnf clean all -y
 
 sudo systemctl start podman.socket
