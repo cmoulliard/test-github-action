@@ -27,8 +27,6 @@ spec:
     #      workspace: project-dir
 
     - name: git-clone
-      runAfter:
-        - rm-workspace
       taskRef:
         name: git-clone
       params:
@@ -49,7 +47,7 @@ spec:
 
     - name: virtualmachine
       runAfter:
-        - ls-workspace
+        - git-clone
       taskRef:
         name: virtualmachine
       params:
