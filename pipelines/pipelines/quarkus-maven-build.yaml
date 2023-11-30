@@ -110,8 +110,8 @@ spec:
         - name: GOALS
           value:
             - quarkus:deploy
-            - -Dquarkus.openshift.build-strategy=docker
-            - -Dquarkus.openshift.deploy=true
+            - -Dquarkus.kubernetes.build-strategy=docker
+            - -Dquarkus.kubernetes.deploy=true
             - -Dquarkus.log.level=DEBUG
       workspaces:
         - name: maven-settings
