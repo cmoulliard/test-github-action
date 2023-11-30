@@ -1,0 +1,26 @@
+name: build push podman-remote vm
+
+on:
+  workflow_dispatch:
+
+env:
+  LIBGUESTFS_BACKEND: direct
+  OS_IMAGE: https://mirror.karneval.cz/pub/linux/fedora/linux/releases/38/Cloud/x86_64/images/Fedora-Cloud-Base-38-1.6.x86_64.qcow2
+jobs:
+  build-push:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Install libguestfs tools
+        run: |
+          apt-get -y install libguestfs-tools
+
+      - name: Download the Fedora Cloud image
+        run: |
+          curl -L -o disk.img ${IMAGE}
+
+      - name: Install needed tools
+        run: |
+          virt-customize -a disk.img --install cloud-init,podman,openssh-server,socat,qemu-guest-agent
