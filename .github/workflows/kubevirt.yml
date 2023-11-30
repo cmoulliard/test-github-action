@@ -188,6 +188,7 @@ jobs:
            
            echo "Wait a few second till the pipelineRun is created/started"
            sleep 10s
+           tkn pipelinerun describe quarkus-maven-build-run
            
            while true; do
              STATUS=$(tkn pipelinerun describe quarkus-maven-build-run -o json | jq -r '.status.conditions[] | select(.reason=="Completed") | true')
@@ -198,7 +199,7 @@ jobs:
                 echo "PipelineRun is still running ..."
                 tkn pipelinerun describe quarkus-maven-build-run -o json | jq -r '.status.conditions[] | .message'
              fi
-             sleep 10
+             sleep 20
            done
 
        - name: (Only if it succeeded) Log messages
