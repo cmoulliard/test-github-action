@@ -24,4 +24,5 @@ jobs:
 
       - name: Install needed tools
         run: |
+          export LIBGUESTFS_DEBUG=1 LIBGUESTFS_TRACE=1
           virt-customize -a disk.img --install cloud-init,podman,openssh-server,socat,qemu-guest-agent
