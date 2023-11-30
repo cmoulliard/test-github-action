@@ -173,7 +173,11 @@ jobs:
            #kubectl delete pod podname-client
 
        - name: Run our test case
-         run : |
+         run : | 
+           kubectl apply -f pipelines/setup/project-pvc.yaml
+           kubectl apply -f pipelines/setup/m2-repo-pvc.yaml
+           kubectl apply -f pipelines/setup/configmap-maven-settings.yaml
+  
            kubectl apply -f pipelines/tasks/git-clone.yaml
            kubectl apply -f pipelines/tasks/rm-workspace.yaml
            kubectl apply -f pipelines/tasks/ls-workspace.yaml
@@ -182,9 +186,8 @@ jobs:
            kubectl apply -f pipelines/pipelines/quarkus-maven-build.yaml
            kubectl apply -f pipelines/pipelineruns/quarkus-maven-build-run.yaml
            
-           #tkn pr logs quarkus-maven-build-run -f
            while true; do
-             STATUS=$(tkn pipelinerun describe quarkus-maven-build-run -o json | jq -r '.status.conditions[] | select(.type=="Succeeded") | true')
+             STATUS=$(tkn pipelinerun describe quarkus-maven-build-run -o json | jq -r '.status.conditions[] | select(.reason=="Completed") | true')
              if [ "$STATUS" == "true" ]; then
                 echo "Pipeline run succeeded."
                 break

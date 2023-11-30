@@ -19,12 +19,12 @@ spec:
     - name: maven-m2-repo
     - name: maven-settings
   tasks:
-    - name: rm-workspace
-      taskRef:
-        name: rm-workspace
-      workspaces:
-        - name: project-dir
-          workspace: project-dir
+    #- name: rm-workspace
+    #  taskRef:
+    #    name: rm-workspace
+    #  workspaces:
+    #    - name: project-dir
+    #      workspace: project-dir
 
     - name: git-clone
       runAfter:
@@ -38,14 +38,14 @@ spec:
         - name: project-dir
           workspace: project-dir
 
-    - name: ls-workspace
-      runAfter:
-        - git-clone
-      taskRef:
-        name: ls-workspace
-      workspaces:
-        - name: project-dir
-          workspace: project-dir
+    #- name: ls-workspace
+    #  runAfter:
+    #    - git-clone
+    #  taskRef:
+    #    name: ls-workspace
+    #  workspaces:
+    #    - name: project-dir
+    #      workspace: project-dir
 
     - name: virtualmachine
       runAfter:
