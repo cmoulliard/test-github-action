@@ -202,8 +202,9 @@ jobs:
                exit 2
              fi
              sleep 20
-             echo "Waiting for PipelineRun to complete ..."
+             MSG=$(kubectl get pipelinerun quarkus-maven-build-run -o json | jq -rc .status.conditions[0].message)
              STATUS=$(kubectl get pipelinerun quarkus-maven-build-run -o json | jq -rc .status.conditions[0].status)
+             echo "Waiting for PipelineRun to complete: $MSG; $STATUS"
            done
            
            #while true; do
