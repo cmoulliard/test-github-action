@@ -150,7 +150,7 @@ jobs:
            kubectl create clusterrolebinding pod-kubevirt-viewer --clusterrole=kubevirt.io:view --serviceaccount=default:default
            # kubectl get clusterrolebinding pod-kubevirt-viewer -oyaml
 
-       - name: Wait till podman replies
+       - name: Wait till podman remote replies
          run: |
            VM_IP=$(kubectl get vmi -o jsonpath='{.items[0].status.interfaces[0].ipAddress}')
            echo "VM IP is: $VM_IP"
@@ -175,7 +175,7 @@ jobs:
                sleep 20
            done
 
-       - name: Run our test case
+       - name: Run the Quarkus HelloWorld test case using Tekton to git clone, test and deploy the image/app on k8s
          run : | 
            kubectl apply -f pipelines/setup/project-pvc.yaml
            kubectl apply -f pipelines/setup/m2-repo-pvc.yaml
