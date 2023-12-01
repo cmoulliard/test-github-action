@@ -230,6 +230,12 @@ jobs:
        - name: (Only if it succeeded) Log messages
          if: success()
          run: |
+           echo "########### All PODs ################"
+           kubectl get pod -A
+           
+           echo "########### All Services ################"
+           kubectl get svc -A
+           
            echo "######### Tekton describe ################"
            tkn pipelinerun describe quarkus-maven-build-run
            
