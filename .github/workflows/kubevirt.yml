@@ -196,7 +196,7 @@ jobs:
            
            STATUS=$(kubectl get pipelinerun quarkus-maven-build-run -o json | jq -rc .status.conditions[0].status)
            LIMIT=$((SECONDS+600))
-           while [ "${STATUS}" != "Completed" ]; do
+           while [ "${STATUS}" != "True" ]; do
              if [ $SECONDS -gt $LIMIT ]; then
                echo "Timeout waiting for PipelineRun to complete"
                exit 2
