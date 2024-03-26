@@ -23,6 +23,11 @@ jobs:
           git config user.name "${{ github.actor }}"
           git config user.email "${{ github.actor_id }}+${{ github.actor }}@users.noreply.github.com"
 
+      - name: Update RELEASE.md
+        id: update_release_file
+        run: |
+          echo "Add dummy change" >> RELEASE.md
+
       - name: Create pull request for release
         id: create_pr
         uses: peter-evans/create-pull-request@v6
