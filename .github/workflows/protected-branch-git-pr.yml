@@ -1,4 +1,4 @@
-name: Ccreate dummy Release PR
+name: Create dummy Release PR
 
 on:
   workflow_dispatch:
@@ -28,8 +28,8 @@ jobs:
         uses: peter-evans/create-pull-request@v6
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          branch: release/dummy-${{ github.event.inputs.version_type }}
-          title: "Release: dummy: ${{ github.event.inputs.version_type }}"
+          branch: release/dummy-${{ github.event.inputs.release_version }}
+          title: "Release: dummy: ${{ github.event.inputs.release_version }}"
           body: |
-            Pull request for release ${{ github.event.inputs.version_type }}
+            Pull request for release ${{ github.event.inputs.release_version }}
           base: main
