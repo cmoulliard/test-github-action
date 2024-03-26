@@ -1,0 +1,35 @@
+name: Ccreate dummy Release PR
+
+on:
+  workflow_dispatch:
+    inputs:
+      release_version:
+        description: 'Version of the branch to be released'
+        required: true
+        default: '01'
+
+permissions:
+  contents: write
+
+jobs:
+  version:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Git
+        run: |
+          git config user.name "${{ github.actor }}"
+          git config user.email "${{ github.actor_id }}+${{ github.actor }}@users.noreply.github.com"
+
+      - name: Create pull request for release
+        id: create_pr
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          branch: release/dummy-${{ github.event.inputs.version_type }}
+          title: "Release: dummy: ${{ github.event.inputs.version_type }}"
+          body: |
+            Pull request for release ${{ github.event.inputs.version_type }}
+          base: main
